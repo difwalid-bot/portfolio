@@ -1,110 +1,1364 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>my portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron&family=Poppins&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dif Walid Portfolio</title>
+  <style>
+    :root {
+      --taskbar-bg: rgba(24, 27, 33, 0.94);
+      --taskbar-border: rgba(255, 255, 255, 0.08);
+      --text: #f5f8ff;
+      --muted: rgba(245, 248, 255, 0.75);
+      --window-border: #6f6f6f;
+      --window-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
+      --window-bg: #f2f2f2;
+      --title-blue-top: #0f73d8;
+      --title-blue-bottom: #055cb4;
+      --editor-border: #c9c9c9;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(90deg, rgba(6, 18, 34, 0.24), rgba(6, 18, 34, 0.04)),
+        linear-gradient(180deg, rgba(4, 10, 24, 0.08), rgba(4, 10, 24, 0.28)),
+        url("img/background.jpg") center center / cover no-repeat fixed;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 16% 24%, rgba(255, 255, 255, 0.1), transparent 28%),
+        linear-gradient(180deg, transparent 56%, rgba(0, 0, 0, 0.18) 100%);
+      pointer-events: none;
+    }
+
+    .desktop {
+      position: relative;
+      min-height: 100vh;
+      padding: 34px 24px 52px;
+      padding-bottom: 52px;
+    }
+
+    .desktop-icons {
+      position: relative;
+      min-height: calc(100vh - 86px);
+    }
+
+    .desktop-file {
+      position: absolute;
+      top: var(--file-top, 32px);
+      left: var(--file-left, 24px);
+      width: 148px;
+      display: grid;
+      justify-items: center;
+      gap: 12px;
+      padding: 14px 12px;
+      border: 0;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      text-align: center;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .desktop-file:hover,
+    .desktop-file:focus-visible,
+    .desktop-file.is-active {
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+    }
+
+    .file-icon {
+      position: relative;
+      width: 72px;
+      height: 88px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: linear-gradient(180deg, #ffffff, #ececec);
+      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
+    }
+
+    .file-icon::before {
+      content: "";
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #d9d9d9 0 49%, #ffffff 50% 100%);
+      border-top: 1px solid rgba(255, 255, 255, 0.9);
+      border-right: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    .file-icon::after {
+      content: "TXT";
+      position: absolute;
+      left: 8px;
+      right: 8px;
+      bottom: 9px;
+      padding: 5px 0;
+      background: #0f73d8;
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-align: center;
+    }
+
+    .file-icon.video::after {
+      content: "MP4";
+      background: #d66b00;
+    }
+
+    .file-lines {
+      position: absolute;
+      top: 19px;
+      left: 11px;
+      right: 11px;
+      height: 28px;
+      background:
+        linear-gradient(#9ca6b6 0 0) 0 0 / 100% 1px no-repeat,
+        linear-gradient(#9ca6b6 0 0) 0 12px / 100% 1px no-repeat,
+        linear-gradient(#9ca6b6 0 0) 0 24px / 72% 1px no-repeat;
+    }
+
+    .file-play {
+      position: absolute;
+      top: 18px;
+      left: 21px;
+      width: 0;
+      height: 0;
+      border-top: 14px solid transparent;
+      border-bottom: 14px solid transparent;
+      border-left: 24px solid #5a6475;
+      filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.18));
+    }
+
+    .file-name {
+      font-size: 1.05rem;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0, 0, 0, 0.24);
+      z-index: 10;
+    }
+
+    .modal-backdrop.is-open {
+      display: flex;
+    }
+
+    .notepad-window {
+      width: min(860px, 100%);
+      height: min(620px, calc(100vh - 48px));
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      background: var(--window-bg);
+      border: 1px solid var(--window-border);
+      box-shadow: var(--window-shadow);
+      color: #111111;
+    }
+
+    .window-titlebar {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-left: 10px;
+      background: linear-gradient(180deg, var(--title-blue-top), var(--title-blue-bottom));
+      color: #ffffff;
+      user-select: none;
+    }
+
+    .window-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      font-size: 0.9rem;
+    }
+
+    .window-title span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .notepad-icon {
+      width: 16px;
+      height: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      background: linear-gradient(180deg, #ffffff, #e8eefc);
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .notepad-icon::before {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      right: 3px;
+      height: 1px;
+      background: #7e9ccb;
+      box-shadow: 0 4px 0 #7e9ccb, 0 8px 0 #7e9ccb;
+    }
+
+    .window-controls {
+      display: flex;
+      align-items: stretch;
+      height: 100%;
+    }
+
+    .window-control {
+      width: 45px;
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .window-control:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .window-control.close:hover {
+      background: #e81123;
+    }
+
+    .window-menubar {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      height: 28px;
+      padding: 0 10px;
+      border-bottom: 1px solid #d6d6d6;
+      background: #f7f7f7;
+      font-size: 0.86rem;
+      color: #111111;
+    }
+
+    .editor-shell {
+      padding: 2px;
+      background: #ffffff;
+      min-height: 0;
+    }
+
+    .editor-area {
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      overflow: auto;
+      border: 1px solid var(--editor-border);
+      padding: 16px 18px;
+      background: #ffffff;
+      color: #111111;
+      font: 0.98rem/1.65 "Cascadia Mono", Consolas, "Courier New", monospace;
+      letter-spacing: 0.01em;
+      outline: none;
+      tab-size: 2;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .editor-area a {
+      color: #0057b8;
+      text-decoration: underline;
+    }
+
+    .editor-area a:hover {
+      color: #003b7c;
+    }
+
+    .statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 18px;
+      height: 24px;
+      padding: 0 10px;
+      border-top: 1px solid #d6d6d6;
+      background: #f7f7f7;
+      color: #333333;
+      font-size: 0.78rem;
+    }
+
+    .status-file {
+      margin-right: auto;
+      color: #555555;
+    }
+
+    .notepad-window.is-maximized {
+      width: calc(100vw - 16px);
+      height: calc(100vh - 68px);
+    }
+
+    .media-window {
+      width: min(920px, 100%);
+      height: min(680px, calc(100vh - 48px));
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      background: var(--window-bg);
+      border: 1px solid var(--window-border);
+      box-shadow: var(--window-shadow);
+      color: #111111;
+    }
+
+    .media-window.is-maximized {
+      width: calc(100vw - 16px);
+      height: calc(100vh - 68px);
+    }
+
+    .media-toolbar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      height: 34px;
+      padding: 0 12px;
+      border-bottom: 1px solid #d6d6d6;
+      background: #f7f7f7;
+      color: #111111;
+      font-size: 0.85rem;
+    }
+
+    .media-note {
+      padding: 12px 14px;
+      border-bottom: 1px solid #d6d6d6;
+      background: #fff7d6;
+      color: #3b2b00;
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+
+    .media-note strong {
+      font-weight: 700;
+    }
+
+    .media-note.is-hidden {
+      display: none;
+    }
+
+    .media-stage {
+      min-height: 0;
+      padding: 10px;
+      background:
+        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 36%),
+        linear-gradient(180deg, #2a2d34, #14161a);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .media-player {
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: #000000;
+      object-fit: contain;
+    }
+
+    .taskbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 52px;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: var(--taskbar-bg);
+      border-top: 1px solid var(--taskbar-border);
+      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.28);
+      z-index: 6;
+    }
+
+    .taskbar-left,
+    .taskbar-right,
+    .tray {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .taskbar-button,
+    .taskbar-search,
+    .tray-item {
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+    }
+
+    .taskbar-button {
+      width: 38px;
+      padding: 0;
+      border: 1px solid transparent;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .taskbar-document {
+      width: auto;
+      min-width: 62px;
+      padding: 0 12px;
+      font-size: 0.76rem;
+      letter-spacing: 0.06em;
+    }
+
+    .taskbar-button.active {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .taskbar-search {
+      width: min(320px, 34vw);
+      justify-content: flex-start;
+      padding: 0 14px;
+      background: rgba(255, 255, 255, 0.11);
+      color: rgba(255, 255, 255, 0.74);
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .taskbar-divider {
+      width: 1px;
+      height: 22px;
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .start-logo {
+      width: 18px;
+      height: 18px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2px;
+    }
+
+    .start-logo span {
+      display: block;
+      background: #f5f8ff;
+    }
+
+    .start-menu {
+      position: fixed;
+      left: 12px;
+      bottom: 62px;
+      width: min(360px, calc(100vw - 24px));
+      padding: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      background:
+        linear-gradient(180deg, rgba(40, 44, 54, 0.98), rgba(20, 22, 28, 0.96)),
+        rgba(20, 22, 28, 0.92);
+      box-shadow: 0 24px 44px rgba(0, 0, 0, 0.42);
+      backdrop-filter: blur(18px);
+      color: var(--text);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(16px) scale(0.98);
+      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+      z-index: 8;
+    }
+
+    .start-menu.is-open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+
+    .start-menu-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .start-menu-avatar {
+      width: 54px;
+      height: 54px;
+      display: grid;
+      place-items: center;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #1988ff, #00b0ff);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
+      flex: 0 0 auto;
+    }
+
+    .start-menu-badge,
+    .start-menu-title,
+    .start-menu-subtitle,
+    .start-menu-footnote {
+      margin: 0;
+    }
+
+    .start-menu-badge {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .start-menu-title {
+      margin-top: 4px;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    .start-menu-subtitle {
+      margin-top: 4px;
+      color: rgba(245, 248, 255, 0.74);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
+
+    .start-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .start-contact-card {
+      min-height: 126px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.06);
+      color: inherit;
+      text-decoration: none;
+      transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
+    }
+
+    .start-contact-card:hover,
+    .start-contact-card:focus-visible {
+      transform: translateY(-2px);
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      outline: none;
+    }
+
+    .start-contact-card.wide {
+      grid-column: 1 / -1;
+      min-height: 110px;
+    }
+
+    .start-contact-card.is-placeholder {
+      border-style: dashed;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .start-contact-kind {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.62);
+    }
+
+    .start-contact-value {
+      display: block;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .start-contact-action {
+      color: rgba(245, 248, 255, 0.76);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .start-menu-footnote {
+      margin-top: 14px;
+      color: rgba(245, 248, 255, 0.68);
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    .tray-item {
+      min-width: 30px;
+      padding: 0 8px;
+      font-size: 0.86rem;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .clock {
+      padding: 0 10px;
+      text-align: right;
+      line-height: 1.05;
+    }
+
+    .clock-time {
+      display: block;
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .clock-date {
+      display: block;
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    @media (max-width: 720px) {
+      .desktop-icons {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        gap: 10px;
+        min-height: auto;
+      }
+
+      .desktop-file {
+        position: relative;
+        top: auto;
+        left: auto;
+        width: 112px;
+      }
+
+      .modal-backdrop {
+        padding: 12px;
+      }
+
+      .notepad-window {
+        height: min(640px, calc(100vh - 24px));
+      }
+
+      .window-menubar {
+        gap: 10px;
+        font-size: 0.8rem;
+      }
+
+      .taskbar {
+        height: 56px;
+        padding: 0 6px;
+      }
+
+      .taskbar-search {
+        width: 136px;
+      }
+
+      .start-menu {
+        left: 8px;
+        right: 8px;
+        bottom: 64px;
+        width: auto;
+      }
+
+      .start-menu-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .start-contact-card.wide {
+        grid-column: auto;
+      }
+
+      .tray-item.language {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1 class="glow">Dif Walid</h1>
-    <nav>
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
-      <a href="#gallery">Gallery</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+  <main class="desktop">
+    <div class="desktop-icons" aria-label="Desktop files">
+      <button class="desktop-file" style="--file-top: 30px; --file-left: 28px;" type="button" data-document-button data-file="cv.txt" data-title="cv.txt - Notepad" aria-haspopup="dialog" aria-controls="document-modal" aria-expanded="false">
+        <span class="file-icon" aria-hidden="true">
+          <span class="file-lines"></span>
+        </span>
+        <span class="file-name">cv.txt</span>
+      </button>
 
-  <section class="hero">
-    <h2 class="glow">Welcome to My Digital World</h2>
-    <p>Tech Enthusiast | Creative Educator | Visionary Developer</p>
-    <a href="#projects" class="btn">Explore Projects</a>
-  </section>
+      <button class="desktop-file" style="--file-top: 40vh; --file-left: 43vw;" type="button" data-document-button data-file="projects.txt" data-title="projects.txt - Notepad" aria-haspopup="dialog" aria-controls="document-modal" aria-expanded="false">
+        <span class="file-icon" aria-hidden="true">
+          <span class="file-lines"></span>
+        </span>
+        <span class="file-name">projects.txt</span>
+      </button>
 
-  <section id="about" class="glass">
-    <h2>About Me</h2>
-    <p>intermidiate web Developer and a freelancer i have created over 10 projects now and very fast and smart and professionel you searching for skills i got skills you searching for spped am fast you searching for a website that matches your vision and desires i can create it you can explore my skills in the skills part </p>
-  </section>
+      <button class="desktop-file" style="--file-top: 96px; --file-left: calc(100% - 220px);" type="button" data-video-button data-video-label="chevron.mp4" data-video-src="videos/end(1).mp4" data-video-title="chevron.mp4 - Media Player" aria-haspopup="dialog" aria-controls="video-modal" aria-expanded="false">
+        <span class="file-icon video" aria-hidden="true">
+          <span class="file-play"></span>
+        </span>
+        <span class="file-name">chevron.mp4</span>
+      </button>
 
-  <section id="skills" class="glass">
-    <h2>Skills</h2>
-    <ul class="skills">
-      <li>HTML5 & CSS3</li>
-      <li>JavaScript & PHP</li>
-      <li>Responsive Design</li>
-      <li>CMS wordpress </li>
-      <li>React & Vue.js</li>
-      <li>Node.js & Express</li>
-      <li>Database Management</li>
-      <li>Version Control (Git)</li>
-      <li>API Integration</li>
-      <li>Web Accessibility</li>
-      <li>SEO Best Practices</li>
-      <li>Performance Optimization</li>
-      <li>Cross-Browser Compatibility</li>
-      <li>Agile Methodologies</li>
-      <li>Problem Solving</li>
-      <li>Team Collaboration</li>
-      <li>Creative Thinking</li>
-      <li>Time Management</li>
-      <li>Attention to Detail</li>
-      <li>Communication Skills</li>
-      <li>Project Management</li>
-      <li>Content Management</li>   
-      <li>UI/UX Principles</li>
-    </ul>
-  </section>
+      <button class="desktop-file" style="--file-top: 248px; --file-left: calc(100% - 236px);" type="button" data-video-button data-video-label="ihm-final (1).mp4" data-video-src="videos/ihm-final (1).mp4" data-video-title="ihm-final (1).mp4 - Media Player" data-video-note="Guide: at 1:00 in this video, the first website shown is the older version of the site I created." aria-haspopup="dialog" aria-controls="video-modal" aria-expanded="false">
+        <span class="file-icon video" aria-hidden="true">
+          <span class="file-play"></span>
+        </span>
+        <span class="file-name">ihm-final (1).mp4</span>
+      </button>
+    </div>
+  </main>
 
-  <section id="projects" class="glass">
-    <h2 class="glow">Projects</h2>
-    <div class="project-container">
-      <div class="card animated-card">
-        <h3>GPS Tracker App</h3>
-        <p>Live car tracking and updates with sleek interface.</p>
+  <div class="modal-backdrop" id="document-modal" aria-hidden="true">
+    <section class="notepad-window" role="dialog" aria-modal="true" aria-labelledby="window-title">
+      <header class="window-titlebar">
+        <div class="window-title">
+          <span class="notepad-icon" aria-hidden="true"></span>
+          <span id="window-title">cv.txt - Notepad</span>
+        </div>
+
+        <div class="window-controls" aria-label="Window controls">
+          <button class="window-control" id="minimize-modal" type="button" aria-label="Minimize">_</button>
+          <button class="window-control" id="maximize-modal" type="button" aria-label="Maximize">[]</button>
+          <button class="window-control close" id="close-modal" type="button" aria-label="Close">X</button>
+        </div>
+      </header>
+
+      <nav class="window-menubar" aria-label="Notepad menu">
+        <span>File</span>
+        <span>Edit</span>
+        <span>Format</span>
+        <span>View</span>
+        <span>Help</span>
+      </nav>
+
+      <div class="editor-shell">
+        <div class="editor-area" id="document-content" tabindex="0" role="textbox" aria-readonly="true"></div>
       </div>
-      <div class="card animated-card">
-        <h3>AI Learning Tools</h3>
-        <p>Engaging exercises for French learners powered by AI.</p>
+
+      <footer class="statusbar">
+        <span class="status-file" id="status-file">No file open</span>
+        <span>100%</span>
+        <span>Windows (CRLF)</span>
+        <span>UTF-8</span>
+      </footer>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="video-modal" aria-hidden="true">
+    <section class="media-window" role="dialog" aria-modal="true" aria-labelledby="video-window-title">
+      <header class="window-titlebar">
+        <div class="window-title">
+          <span class="notepad-icon" aria-hidden="true"></span>
+          <span id="video-window-title">chevron.mp4 - Media Player</span>
+        </div>
+
+        <div class="window-controls" aria-label="Window controls">
+          <button class="window-control" id="minimize-video-modal" type="button" aria-label="Minimize">_</button>
+          <button class="window-control" id="maximize-video-modal" type="button" aria-label="Maximize">[]</button>
+          <button class="window-control close" id="close-video-modal" type="button" aria-label="Close">X</button>
+        </div>
+      </header>
+
+      <nav class="media-toolbar" aria-label="Media toolbar">
+        <span>Now Playing</span>
+        <span id="video-toolbar-path">videos/end(1).mp4</span>
+      </nav>
+
+      <div class="media-note is-hidden" id="video-note" role="note" aria-live="polite"></div>
+
+      <div class="media-stage">
+        <video
+          class="media-player"
+          id="video-player"
+          controls
+          preload="metadata"
+          playsinline
+          src="videos/end(1).mp4"
+        ></video>
       </div>
-      <div class="card animated-card">
-        <h3>Online Food Ordering</h3>
-        <p>Interactive and responsive platform for real-time orders.</p>
+
+      <footer class="statusbar">
+        <span class="status-file" id="video-status-file">chevron.mp4</span>
+        <span>MP4</span>
+        <span id="video-status-path">videos/end(1).mp4</span>
+      </footer>
+    </section>
+  </div>
+
+  <section class="start-menu" id="start-menu" aria-label="Start menu" aria-hidden="true">
+    <div class="start-menu-header">
+      <div class="start-menu-avatar" aria-hidden="true">DW</div>
+      <div>
+        <p class="start-menu-badge">Contact Hub</p>
+        <h2 class="start-menu-title">Dif Walid</h2>
+        <p class="start-menu-subtitle">Full-Stack Web Developer based in Algiers, Algeria.</p>
       </div>
     </div>
-          <div class="card animated-card">
-        <h3>property Management</h3>
-        <p>Managing your property with an interactive systeme and having control of all factures </p>
-      </div>
+
+    <div class="start-menu-grid">
+      <a class="start-contact-card" href="https://wa.me/213555997021" target="_blank" rel="noreferrer noopener" aria-label="Open WhatsApp chat">
+        <span class="start-contact-kind">WhatsApp</span>
+        <span class="start-contact-value">+213 555 997 021</span>
+        <span class="start-contact-action">Open a direct chat for project discussions.</span>
+      </a>
+
+      <a class="start-contact-card" href="mailto:difwalid18@gmail.com" aria-label="Send an email">
+        <span class="start-contact-kind">Email</span>
+        <span class="start-contact-value">difwalid18@gmail.com</span>
+        <span class="start-contact-action">Send a message for work, freelance, or collaboration.</span>
+      </a>
+
+      <a class="start-contact-card wide" href="https://www.linkedin.com/in/dif-walid-560a96294/" target="_blank" rel="noreferrer noopener" aria-label="Open LinkedIn profile">
+        <span class="start-contact-kind">LinkedIn</span>
+        <span class="start-contact-value">dif-walid-560a96294</span>
+        <span class="start-contact-action">View my profile, background, and professional experience.</span>
+      </a>
     </div>
-    <div class="card animated-card">
-        <h3>finance management </h3>
-        <p>Managing your finance  and having control of all your expenses annd details and employeess</p>
-      </div>
-    </div>
-   
+
+    <p class="start-menu-footnote">Fastest reply is usually on WhatsApp or email.</p>
   </section>
 
-  <section id="gallery" class="glass gallery">
-    <h2>Interactive Gallery</h2>
-    <div class="images">
-      <img src="work 1.png" alt="Tech" class="hover-image" />
-      <img src="work2.png"  class="hover-image" />
-      <img src="work3.png" alt="Design" class="hover-image" />
-      <img src="work4.png" alt="Code" class="hover-image" />
-      <img src="work5.png" alt
-="Project" class="hover-image" />
-      <img src="work6.png" alt="App" class="hover-image" />
-      
+  <div class="taskbar" aria-label="Taskbar">
+    <div class="taskbar-left">
+      <button class="taskbar-button" id="start-menu-button" type="button" aria-label="Start" aria-controls="start-menu" aria-expanded="false">
+        <div class="start-logo" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+      <div class="taskbar-search">Type here to search</div>
+      <div class="taskbar-divider" aria-hidden="true"></div>
+      <button class="taskbar-button taskbar-document" type="button" data-taskbar-button data-file="cv.txt" data-title="cv.txt - Notepad" aria-label="Open cv.txt">CV</button>
+      <button class="taskbar-button taskbar-document" type="button" data-taskbar-button data-file="projects.txt" data-title="projects.txt - Notepad" aria-label="Open projects.txt">PROJECTS</button>
+      <button class="taskbar-button taskbar-document" type="button" data-video-button data-video-label="chevron.mp4" data-video-src="videos/end(1).mp4" data-video-title="chevron.mp4 - Media Player" aria-label="Open chevron.mp4">CHEVRON</button>
+      <button class="taskbar-button taskbar-document" type="button" data-video-button data-video-label="ihm-final (1).mp4" data-video-src="videos/ihm-final (1).mp4" data-video-title="ihm-final (1).mp4 - Media Player" data-video-note="Guide: at 1:00 in this video, the first website shown is the older version of the site I created." aria-label="Open ihm-final (1).mp4">IHM FINAL</button>
     </div>
-  </section>
 
-  <footer class="glass">
-    <p>Contact: difwalid18@gmail.com</p>
-  </footer>
+    <div class="taskbar-right">
+      <div class="tray">
+        <div class="tray-item">^</div>
+        <div class="tray-item">WiFi</div>
+        <div class="tray-item">VOL</div>
+        <div class="tray-item language">ENG</div>
+      </div>
+      <div class="clock">
+        <span class="clock-time" id="clock-time">12:00 PM</span>
+        <span class="clock-date" id="clock-date">04/04/2026</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const documentButtons = Array.from(document.querySelectorAll("[data-document-button]"));
+    const taskbarDocumentButtons = Array.from(document.querySelectorAll("[data-taskbar-button]"));
+    const videoButtons = Array.from(document.querySelectorAll("[data-video-button]"));
+    const startMenuLinks = Array.from(document.querySelectorAll(".start-menu a"));
+    const modal = document.getElementById("document-modal");
+    const videoModal = document.getElementById("video-modal");
+    const startMenu = document.getElementById("start-menu");
+    const startMenuButton = document.getElementById("start-menu-button");
+    const closeModalButton = document.getElementById("close-modal");
+    const minimizeModalButton = document.getElementById("minimize-modal");
+    const maximizeModalButton = document.getElementById("maximize-modal");
+    const closeVideoModalButton = document.getElementById("close-video-modal");
+    const minimizeVideoModalButton = document.getElementById("minimize-video-modal");
+    const maximizeVideoModalButton = document.getElementById("maximize-video-modal");
+    const documentContent = document.getElementById("document-content");
+    const notepadWindow = document.querySelector(".notepad-window");
+    const mediaWindow = document.querySelector(".media-window");
+    const videoPlayer = document.getElementById("video-player");
+    const windowTitle = document.getElementById("window-title");
+    const videoWindowTitle = document.getElementById("video-window-title");
+    const videoToolbarPath = document.getElementById("video-toolbar-path");
+    const videoNote = document.getElementById("video-note");
+    const videoStatusFile = document.getElementById("video-status-file");
+    const videoStatusPath = document.getElementById("video-status-path");
+    const statusFile = document.getElementById("status-file");
+    const timeElement = document.getElementById("clock-time");
+    const dateElement = document.getElementById("clock-date");
+    const documentCache = new Map();
+    let currentDocument = "";
+    let currentVideoSource = "";
+    let lastTriggerButton = null;
+    const fallbackCv = `CURRICULUM VITAE
+================
+
+PERSONAL INFORMATION
+--------------------
+Name     : Dif Walid
+Location : Algiers, Algeria
+Phone    : +213 555 997 021
+Email    : difwalid18@gmail.com
+
+PROFESSIONAL SUMMARY
+--------------------
+Passionate and results-driven Web Developer with over 2 years of
+experience building modern, scalable, and high-performance web
+applications. Specialized in full-stack development using React,
+Laravel, and Node.js. Strong problem-solving skills with a focus on
+clean code, performance, and user experience.
+
+WORK EXPERIENCE
+---------------
+Full-Stack Web Developer
+Freelance / Projects | 2+ Years
+
+- Developed dynamic and responsive web applications using React and
+  modern JavaScript
+- Built robust backend systems with Node.js and Laravel
+- Designed and managed databases (MySQL) for scalable applications
+- Created REST APIs and integrated third-party services
+- Improved performance and user experience across multiple projects
+- Worked on real-world applications including tracking systems and
+  management platforms
+
+TECHNICAL SKILLS
+----------------
+Frontend
+- React.js
+- HTML5, CSS3, JavaScript (ES6+)
+
+Backend
+- Node.js
+- Laravel (PHP)
+
+Database
+- MySQL
+
+Other Skills
+- REST API Development
+- Git & Version Control
+- Debugging & Optimization
+- Responsive Design
+
+PROJECTS
+--------
+- GPS Car Tracking System (location & speed monitoring in real-time)
+- Dormitory Management Web Application
+- Online Ordering System with dynamic cart and database integration
+- Argoub Promotion Website (real estate promotion company)
+  http://argoubpromotion.fr/
+
+EDUCATION
+---------
+SBL School
+- English Level: C2
+
+LANGUAGES
+---------
+- Arabic  : Native
+- English : Fluent (C2)
+- French  : Intermediate
+
+ADDITIONAL INFORMATION
+----------------------
+- Fast learner and adaptable to new technologies
+- Strong analytical and problem-solving skills
+- Ability to work independently and meet deadlines`;
+    const fallbackProjects = `PROJECTS
+========
+
+1. GPS CAR TRACKING SYSTEM
+--------------------------
+Type  : Real-time vehicle monitoring platform
+Stack : React.js, Node.js / Laravel, MySQL, REST APIs
+
+Overview
+- Built a web platform to monitor vehicle location, movement, and speed
+  in real time.
+- Focused on responsive dashboards, clean data presentation, and reliable
+  backend communication.
+
+Key Features
+- Live GPS position updates
+- Speed and trip activity monitoring
+- Driver / vehicle status tracking
+- Clear interface for operational follow-up
+
+Impact
+- Helped turn raw tracking data into a practical monitoring tool for
+  day-to-day use.
+
+2. DORMITORY MANAGEMENT WEB APPLICATION
+---------------------------------------
+Type  : Administrative management system
+Stack : React.js, Laravel, MySQL
+
+Overview
+- Developed a web application to simplify dormitory operations and centralize
+  resident management.
+- Designed the system to reduce manual work and improve visibility for staff.
+
+Key Features
+- Resident registration and profile management
+- Room allocation and occupancy tracking
+- Administrative dashboards and reporting views
+- Structured data management for daily operations
+
+Impact
+- Improved organization and made dormitory information easier to manage.
+
+3. ONLINE ORDERING SYSTEM
+-------------------------
+Type  : Ordering and cart management platform
+Stack : React.js, Node.js / Laravel, MySQL
+
+Overview
+- Created an ordering experience with a dynamic cart and database-backed
+  product flow.
+- Focused on usability, speed, and a smooth customer journey.
+
+Key Features
+- Dynamic shopping cart interactions
+- Product and order data persistence
+- Responsive frontend experience
+- Backend integration for order handling
+
+Impact
+- Delivered a practical foundation for digital ordering and transaction flow.
+
+4. ARGOUB PROMOTION WEBSITE
+---------------------------
+Type    : Real estate promotion company website
+Website : http://argoubpromotion.fr/
+
+Overview
+- Built a public-facing website for Argoub Promotion to present the company
+  online and showcase its real estate activity.
+- Structured the content to make projects, company information, and contact
+  details easy to browse.
+
+Key Features
+- Corporate presentation pages
+- Real estate project showcase
+- Contact and appointment information
+- Responsive marketing website experience
+
+Impact
+- Gave the client a stronger online presence through a dedicated website.
+
+NOTES
+-----
+- All projects were built with an emphasis on clean UI, responsive layouts,
+  and scalable backend structure.
+- Comfortable adapting these systems to client needs and adding new features
+  over time.`;
+
+    const fallbackDocuments = {
+      "cv.txt": fallbackCv,
+      "projects.txt": fallbackProjects
+    };
+
+    async function loadDocument(fileName) {
+      if (documentCache.has(fileName)) {
+        return documentCache.get(fileName);
+      }
+
+      let documentText = fallbackDocuments[fileName] || "";
+
+      if (window.location.protocol !== "file:") {
+        try {
+          const response = await fetch(fileName, { cache: "no-store" });
+          if (!response.ok) {
+            throw new Error("Could not load " + fileName);
+          }
+          documentText = await response.text();
+        } catch (error) {
+          documentText = fallbackDocuments[fileName] || "";
+        }
+      }
+
+      documentCache.set(fileName, documentText);
+      return documentText;
+    }
+
+    function syncDocumentState() {
+      const isOpen = modal.classList.contains("is-open");
+
+      documentButtons.forEach(function (button) {
+        const isCurrent = isOpen && button.dataset.file === currentDocument;
+        button.classList.toggle("is-active", isCurrent);
+        button.setAttribute("aria-expanded", String(isCurrent));
+      });
+
+      taskbarDocumentButtons.forEach(function (button) {
+        const isCurrent = isOpen && button.dataset.file === currentDocument;
+        button.classList.toggle("active", isCurrent);
+      });
+
+      statusFile.textContent = isOpen && currentDocument ? currentDocument : "No file open";
+    }
+
+    function syncVideoState() {
+      const isOpen = videoModal.classList.contains("is-open");
+      videoButtons.forEach(function (button) {
+        const isCurrent = isOpen && button.dataset.videoSrc === currentVideoSource;
+        if (button.classList.contains("desktop-file")) {
+          button.classList.toggle("is-active", isCurrent);
+          button.setAttribute("aria-expanded", String(isCurrent));
+        } else {
+          button.classList.toggle("active", isCurrent);
+        }
+      });
+    }
+
+    function syncStartMenuState() {
+      const isOpen = startMenu.classList.contains("is-open");
+      startMenuButton.classList.toggle("active", isOpen);
+      startMenuButton.setAttribute("aria-expanded", String(isOpen));
+      startMenu.setAttribute("aria-hidden", String(!isOpen));
+    }
+
+    function openStartMenu() {
+      startMenu.classList.add("is-open");
+      syncStartMenuState();
+    }
+
+    function closeStartMenu() {
+      startMenu.classList.remove("is-open");
+      syncStartMenuState();
+    }
+
+    function toggleStartMenu() {
+      if (startMenu.classList.contains("is-open")) {
+        closeStartMenu();
+      } else {
+        openStartMenu();
+      }
+    }
+
+    function openModal() {
+      closeStartMenu();
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      syncDocumentState();
+      documentContent.focus();
+    }
+
+    function closeModal() {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      syncDocumentState();
+      if (lastTriggerButton) {
+        lastTriggerButton.focus();
+      }
+    }
+
+    function toggleMaximize() {
+      notepadWindow.classList.toggle("is-maximized");
+    }
+
+    function openVideoModal(videoLabel, videoSource, videoTitle, videoDescription) {
+      if (modal.classList.contains("is-open")) {
+        closeModal();
+      }
+      closeStartMenu();
+      currentVideoSource = videoSource;
+      videoWindowTitle.textContent = videoTitle || videoLabel + " - Media Player";
+      videoToolbarPath.textContent = videoSource;
+      videoStatusFile.textContent = videoLabel;
+      videoStatusPath.textContent = videoSource;
+      if (videoDescription) {
+        videoNote.textContent = videoDescription;
+        videoNote.classList.remove("is-hidden");
+      } else {
+        videoNote.textContent = "";
+        videoNote.classList.add("is-hidden");
+      }
+      videoModal.classList.add("is-open");
+      videoModal.setAttribute("aria-hidden", "false");
+      syncVideoState();
+      videoPlayer.pause();
+      if (videoPlayer.getAttribute("src") !== videoSource) {
+        videoPlayer.src = videoSource;
+        videoPlayer.load();
+      }
+      videoPlayer.currentTime = 0;
+      videoPlayer.play().catch(function () {
+        return undefined;
+      });
+      videoPlayer.focus();
+    }
+
+    function closeVideoModal() {
+      videoModal.classList.remove("is-open");
+      videoModal.setAttribute("aria-hidden", "true");
+      videoPlayer.pause();
+      syncVideoState();
+      if (lastTriggerButton) {
+        lastTriggerButton.focus();
+      }
+    }
+
+    function toggleVideoMaximize() {
+      mediaWindow.classList.toggle("is-maximized");
+    }
+
+    function renderDocumentText(text) {
+      const fragment = document.createDocumentFragment();
+      const normalizedText = text.replace(/\r\n/g, "\n");
+      const urlPattern = /(https?:\/\/[^\s]+|(?:www\.)?[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+(?:\/[^\s]*)?)/gi;
+      let lastIndex = 0;
+      let match;
+
+      while ((match = urlPattern.exec(normalizedText)) !== null) {
+        const matchStart = match.index;
+        const url = match[0];
+
+        if (matchStart > lastIndex) {
+          fragment.appendChild(
+            document.createTextNode(normalizedText.slice(lastIndex, matchStart))
+          );
+        }
+
+        const link = document.createElement("a");
+        link.href = /^https?:\/\//i.test(url) ? url : "https://" + url;
+        link.textContent = url;
+        link.target = "_blank";
+        link.rel = "noreferrer noopener";
+        fragment.appendChild(link);
+
+        lastIndex = matchStart + url.length;
+      }
+
+      if (lastIndex < normalizedText.length) {
+        fragment.appendChild(
+          document.createTextNode(normalizedText.slice(lastIndex))
+        );
+      }
+
+      documentContent.replaceChildren(fragment);
+      documentContent.scrollTop = 0;
+    }
+
+    async function openDocument(fileName, title) {
+      if (videoModal.classList.contains("is-open")) {
+        closeVideoModal();
+      }
+      currentDocument = fileName;
+      windowTitle.textContent = title || fileName + " - Notepad";
+      renderDocumentText(await loadDocument(fileName));
+      openModal();
+    }
+
+    function handleDocumentLaunch(event) {
+      lastTriggerButton = event.currentTarget;
+      openDocument(event.currentTarget.dataset.file, event.currentTarget.dataset.title);
+    }
+
+    function handleVideoLaunch(event) {
+      lastTriggerButton = event.currentTarget;
+      openVideoModal(
+        event.currentTarget.dataset.videoLabel,
+        event.currentTarget.dataset.videoSrc,
+        event.currentTarget.dataset.videoTitle,
+        event.currentTarget.dataset.videoNote
+      );
+    }
+
+    function updateClock() {
+      const now = new Date();
+      timeElement.textContent = now.toLocaleTimeString([], {
+        hour: "numeric",
+        minute: "2-digit"
+      });
+      dateElement.textContent = now.toLocaleDateString([], {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+      });
+    }
+
+    documentButtons.forEach(function (button) {
+      button.addEventListener("click", handleDocumentLaunch);
+    });
+    videoButtons.forEach(function (button) {
+      button.addEventListener("click", handleVideoLaunch);
+    });
+    startMenuButton.addEventListener("click", function () {
+      toggleStartMenu();
+    });
+    startMenuLinks.forEach(function (link) {
+      link.addEventListener("click", function () {
+        closeStartMenu();
+      });
+    });
+
+    closeModalButton.addEventListener("click", closeModal);
+    minimizeModalButton.addEventListener("click", closeModal);
+    maximizeModalButton.addEventListener("click", toggleMaximize);
+    closeVideoModalButton.addEventListener("click", closeVideoModal);
+    minimizeVideoModalButton.addEventListener("click", closeVideoModal);
+    maximizeVideoModalButton.addEventListener("click", toggleVideoMaximize);
+
+    taskbarDocumentButtons.forEach(function (button) {
+      button.addEventListener("click", handleDocumentLaunch);
+    });
+
+    modal.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        closeModal();
+      }
+    });
+
+    videoModal.addEventListener("click", function (event) {
+      if (event.target === videoModal) {
+        closeVideoModal();
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+      if (
+        startMenu.classList.contains("is-open") &&
+        event.target !== startMenuButton &&
+        !startMenuButton.contains(event.target) &&
+        !startMenu.contains(event.target)
+      ) {
+        closeStartMenu();
+      }
+    });
+
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && videoModal.classList.contains("is-open")) {
+        closeVideoModal();
+      } else if (event.key === "Escape" && modal.classList.contains("is-open")) {
+        closeModal();
+      } else if (event.key === "Escape" && startMenu.classList.contains("is-open")) {
+        closeStartMenu();
+      }
+    });
+
+    syncStartMenuState();
+    updateClock();
+    setInterval(updateClock, 30000);
+  </script>
 </body>
 </html>

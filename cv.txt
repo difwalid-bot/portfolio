@@ -1,0 +1,75 @@
+CURRICULUM VITAE
+================
+
+PERSONAL INFORMATION
+--------------------
+Name     : Dif Walid
+Location : Algiers, Algeria
+Phone    : +213 555 997 021
+Email    : difwalid18@gmail.com
+
+PROFESSIONAL SUMMARY
+--------------------
+Passionate and results-driven Web Developer with over 2 years of
+experience building modern, scalable, and high-performance web
+applications. Specialized in full-stack development using React,
+Laravel, and Node.js. Strong problem-solving skills with a focus on
+clean code, performance, and user experience.
+
+WORK EXPERIENCE
+---------------
+Full-Stack Web Developer
+Freelance / Projects | 2+ Years
+
+- Developed dynamic and responsive web applications using React and
+  modern JavaScript
+- Built robust backend systems with Node.js and Laravel
+- Designed and managed databases (MySQL) for scalable applications
+- Created REST APIs and integrated third-party services
+- Improved performance and user experience across multiple projects
+- Worked on real-world applications including tracking systems and
+  management platforms
+
+TECHNICAL SKILLS
+----------------
+Frontend
+- React.js
+- HTML5, CSS3, JavaScript (ES6+)
+
+Backend
+- Node.js
+- Laravel (PHP)
+
+Database
+- MySQL
+
+Other Skills
+- REST API Development
+- Git & Version Control
+- Debugging & Optimization
+- Responsive Design
+
+PROJECTS
+--------
+- GPS Car Tracking System (location & speed monitoring in real-time)
+- Dormitory Management Web Application
+- Online Ordering System with dynamic cart and database integration
+- Argoub Promotion Website (real estate promotion company)
+  http://argoubpromotion.fr/
+
+EDUCATION
+---------
+SBL School
+- English Level: C2
+
+LANGUAGES
+---------
+- Arabic  : Native
+- English : Fluent (C2)
+- French  : Intermediate
+
+ADDITIONAL INFORMATION
+----------------------
+- Fast learner and adaptable to new technologies
+- Strong analytical and problem-solving skills
+- Ability to work independently and meet deadlines

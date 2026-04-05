@@ -1,0 +1,88 @@
+PROJECTS
+========
+
+1. GPS CAR TRACKING SYSTEM
+--------------------------
+Type  : Real-time vehicle monitoring platform
+Stack : React.js, Node.js / Laravel, MySQL, REST APIs
+
+Overview
+- Built a web platform to monitor vehicle location, movement, and speed
+  in real time.
+- Focused on responsive dashboards, clean data presentation, and reliable
+  backend communication.
+
+Key Features
+- Live GPS position updates
+- Speed and trip activity monitoring
+- Driver / vehicle status tracking
+- Clear interface for operational follow-up
+
+Impact
+- Helped turn raw tracking data into a practical monitoring tool for
+  day-to-day use.
+
+2. DORMITORY MANAGEMENT WEB APPLICATION
+---------------------------------------
+Type  : Administrative management system
+Stack : React.js, Laravel, MySQL
+
+Overview
+- Developed a web application to simplify dormitory operations and centralize
+  resident management.
+- Designed the system to reduce manual work and improve visibility for staff.
+
+Key Features
+- Resident registration and profile management
+- Room allocation and occupancy tracking
+- Administrative dashboards and reporting views
+- Structured data management for daily operations
+
+Impact
+- Improved organization and made dormitory information easier to manage.
+
+3. ONLINE ORDERING SYSTEM
+-------------------------
+Type  : Ordering and cart management platform
+Stack : React.js, Node.js / Laravel, MySQL
+
+Overview
+- Created an ordering experience with a dynamic cart and database-backed
+  product flow.
+- Focused on usability, speed, and a smooth customer journey.
+
+Key Features
+- Dynamic shopping cart interactions
+- Product and order data persistence
+- Responsive frontend experience
+- Backend integration for order handling
+
+Impact
+- Delivered a practical foundation for digital ordering and transaction flow.
+
+4. ARGOUB PROMOTION WEBSITE
+---------------------------
+Type    : Real estate promotion company website
+Website : http://argoubpromotion.fr/
+
+Overview
+- Built a public-facing website for Argoub Promotion to present the company
+  online and showcase its real estate activity.
+- Structured the content to make projects, company information, and contact
+  details easy to browse.
+
+Key Features
+- Corporate presentation pages
+- Real estate project showcase
+- Contact and appointment information
+- Responsive marketing website experience
+
+Impact
+- Gave the client a stronger online presence through a dedicated website.
+
+NOTES
+-----
+- All projects were built with an emphasis on clean UI, responsive layouts,
+  and scalable backend structure.
+- Comfortable adapting these systems to client needs and adding new features
+  over time.

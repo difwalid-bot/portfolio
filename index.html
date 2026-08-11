@@ -1,1364 +1,2156 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dif Walid Portfolio</title>
-  <style>
-    :root {
-      --taskbar-bg: rgba(24, 27, 33, 0.94);
-      --taskbar-border: rgba(255, 255, 255, 0.08);
-      --text: #f5f8ff;
-      --muted: rgba(245, 248, 255, 0.75);
-      --window-border: #6f6f6f;
-      --window-shadow: 0 24px 48px rgba(0, 0, 0, 0.45);
-      --window-bg: #f2f2f2;
-      --title-blue-top: #0f73d8;
-      --title-blue-bottom: #055cb4;
-      --editor-border: #c9c9c9;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-    }
-
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      color: var(--text);
-      background:
-        linear-gradient(90deg, rgba(6, 18, 34, 0.24), rgba(6, 18, 34, 0.04)),
-        linear-gradient(180deg, rgba(4, 10, 24, 0.08), rgba(4, 10, 24, 0.28)),
-        url("img/background.jpg") center center / cover no-repeat fixed;
-      overflow: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        radial-gradient(circle at 16% 24%, rgba(255, 255, 255, 0.1), transparent 28%),
-        linear-gradient(180deg, transparent 56%, rgba(0, 0, 0, 0.18) 100%);
-      pointer-events: none;
-    }
-
-    .desktop {
-      position: relative;
-      min-height: 100vh;
-      padding: 34px 24px 52px;
-      padding-bottom: 52px;
-    }
-
-    .desktop-icons {
-      position: relative;
-      min-height: calc(100vh - 86px);
-    }
-
-    .desktop-file {
-      position: absolute;
-      top: var(--file-top, 32px);
-      left: var(--file-left, 24px);
-      width: 148px;
-      display: grid;
-      justify-items: center;
-      gap: 12px;
-      padding: 14px 12px;
-      border: 0;
-      border-radius: 4px;
-      background: transparent;
-      color: var(--text);
-      cursor: pointer;
-      text-align: center;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    .desktop-file:hover,
-    .desktop-file:focus-visible,
-    .desktop-file.is-active {
-      background: rgba(255, 255, 255, 0.12);
-      outline: none;
-    }
-
-    .file-icon {
-      position: relative;
-      width: 72px;
-      height: 88px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      background: linear-gradient(180deg, #ffffff, #ececec);
-      box-shadow: 0 10px 18px rgba(0, 0, 0, 0.28);
-    }
-
-    .file-icon::before {
-      content: "";
-      position: absolute;
-      top: -1px;
-      right: -1px;
-      width: 20px;
-      height: 20px;
-      background: linear-gradient(135deg, #d9d9d9 0 49%, #ffffff 50% 100%);
-      border-top: 1px solid rgba(255, 255, 255, 0.9);
-      border-right: 1px solid rgba(255, 255, 255, 0.9);
-    }
-
-    .file-icon::after {
-      content: "TXT";
-      position: absolute;
-      left: 8px;
-      right: 8px;
-      bottom: 9px;
-      padding: 5px 0;
-      background: #0f73d8;
-      color: #ffffff;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      text-align: center;
-    }
-
-    .file-icon.video::after {
-      content: "MP4";
-      background: #d66b00;
-    }
-
-    .file-lines {
-      position: absolute;
-      top: 19px;
-      left: 11px;
-      right: 11px;
-      height: 28px;
-      background:
-        linear-gradient(#9ca6b6 0 0) 0 0 / 100% 1px no-repeat,
-        linear-gradient(#9ca6b6 0 0) 0 12px / 100% 1px no-repeat,
-        linear-gradient(#9ca6b6 0 0) 0 24px / 72% 1px no-repeat;
-    }
-
-    .file-play {
-      position: absolute;
-      top: 18px;
-      left: 21px;
-      width: 0;
-      height: 0;
-      border-top: 14px solid transparent;
-      border-bottom: 14px solid transparent;
-      border-left: 24px solid #5a6475;
-      filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.18));
-    }
-
-    .file-name {
-      font-size: 1.05rem;
-      line-height: 1.3;
-      word-break: break-word;
-    }
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background: rgba(0, 0, 0, 0.24);
-      z-index: 10;
-    }
-
-    .modal-backdrop.is-open {
-      display: flex;
-    }
-
-    .notepad-window {
-      width: min(860px, 100%);
-      height: min(620px, calc(100vh - 48px));
-      display: grid;
-      grid-template-rows: auto auto 1fr auto;
-      background: var(--window-bg);
-      border: 1px solid var(--window-border);
-      box-shadow: var(--window-shadow);
-      color: #111111;
-    }
-
-    .window-titlebar {
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding-left: 10px;
-      background: linear-gradient(180deg, var(--title-blue-top), var(--title-blue-bottom));
-      color: #ffffff;
-      user-select: none;
-    }
-
-    .window-title {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-      font-size: 0.9rem;
-    }
-
-    .window-title span:last-child {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    .notepad-icon {
-      width: 16px;
-      height: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      background: linear-gradient(180deg, #ffffff, #e8eefc);
-      position: relative;
-      flex: 0 0 auto;
-    }
-
-    .notepad-icon::before {
-      content: "";
-      position: absolute;
-      top: 2px;
-      left: 3px;
-      right: 3px;
-      height: 1px;
-      background: #7e9ccb;
-      box-shadow: 0 4px 0 #7e9ccb, 0 8px 0 #7e9ccb;
-    }
-
-    .window-controls {
-      display: flex;
-      align-items: stretch;
-      height: 100%;
-    }
-
-    .window-control {
-      width: 45px;
-      border: 0;
-      background: transparent;
-      color: #ffffff;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .window-control:hover {
-      background: rgba(255, 255, 255, 0.14);
-    }
-
-    .window-control.close:hover {
-      background: #e81123;
-    }
-
-    .window-menubar {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      height: 28px;
-      padding: 0 10px;
-      border-bottom: 1px solid #d6d6d6;
-      background: #f7f7f7;
-      font-size: 0.86rem;
-      color: #111111;
-    }
-
-    .editor-shell {
-      padding: 2px;
-      background: #ffffff;
-      min-height: 0;
-    }
-
-    .editor-area {
-      width: 100%;
-      height: 100%;
-      min-height: 0;
-      overflow: auto;
-      border: 1px solid var(--editor-border);
-      padding: 16px 18px;
-      background: #ffffff;
-      color: #111111;
-      font: 0.98rem/1.65 "Cascadia Mono", Consolas, "Courier New", monospace;
-      letter-spacing: 0.01em;
-      outline: none;
-      tab-size: 2;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .editor-area a {
-      color: #0057b8;
-      text-decoration: underline;
-    }
-
-    .editor-area a:hover {
-      color: #003b7c;
-    }
-
-    .statusbar {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 18px;
-      height: 24px;
-      padding: 0 10px;
-      border-top: 1px solid #d6d6d6;
-      background: #f7f7f7;
-      color: #333333;
-      font-size: 0.78rem;
-    }
-
-    .status-file {
-      margin-right: auto;
-      color: #555555;
-    }
-
-    .notepad-window.is-maximized {
-      width: calc(100vw - 16px);
-      height: calc(100vh - 68px);
-    }
-
-    .media-window {
-      width: min(920px, 100%);
-      height: min(680px, calc(100vh - 48px));
-      display: grid;
-      grid-template-rows: auto auto auto 1fr auto;
-      background: var(--window-bg);
-      border: 1px solid var(--window-border);
-      box-shadow: var(--window-shadow);
-      color: #111111;
-    }
-
-    .media-window.is-maximized {
-      width: calc(100vw - 16px);
-      height: calc(100vh - 68px);
-    }
-
-    .media-toolbar {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      height: 34px;
-      padding: 0 12px;
-      border-bottom: 1px solid #d6d6d6;
-      background: #f7f7f7;
-      color: #111111;
-      font-size: 0.85rem;
-    }
-
-    .media-note {
-      padding: 12px 14px;
-      border-bottom: 1px solid #d6d6d6;
-      background: #fff7d6;
-      color: #3b2b00;
-      font-size: 0.92rem;
-      line-height: 1.45;
-    }
-
-    .media-note strong {
-      font-weight: 700;
-    }
-
-    .media-note.is-hidden {
-      display: none;
-    }
-
-    .media-stage {
-      min-height: 0;
-      padding: 10px;
-      background:
-        radial-gradient(circle at top, rgba(255, 255, 255, 0.12), transparent 36%),
-        linear-gradient(180deg, #2a2d34, #14161a);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .media-player {
-      width: 100%;
-      height: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: #000000;
-      object-fit: contain;
-    }
-
-    .taskbar {
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 52px;
-      padding: 0 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      background: var(--taskbar-bg);
-      border-top: 1px solid var(--taskbar-border);
-      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.28);
-      z-index: 6;
-    }
-
-    .taskbar-left,
-    .taskbar-right,
-    .tray {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-width: 0;
-    }
-
-    .taskbar-button,
-    .taskbar-search,
-    .tray-item {
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text);
-    }
-
-    .taskbar-button {
-      width: 38px;
-      padding: 0;
-      border: 1px solid transparent;
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text);
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .taskbar-document {
-      width: auto;
-      min-width: 62px;
-      padding: 0 12px;
-      font-size: 0.76rem;
-      letter-spacing: 0.06em;
-    }
-
-    .taskbar-button.active {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.08);
-    }
-
-    .taskbar-search {
-      width: min(320px, 34vw);
-      justify-content: flex-start;
-      padding: 0 14px;
-      background: rgba(255, 255, 255, 0.11);
-      color: rgba(255, 255, 255, 0.74);
-      font-size: 0.92rem;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .taskbar-divider {
-      width: 1px;
-      height: 22px;
-      background: rgba(255, 255, 255, 0.14);
-    }
-
-    .start-logo {
-      width: 18px;
-      height: 18px;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2px;
-    }
-
-    .start-logo span {
-      display: block;
-      background: #f5f8ff;
-    }
-
-    .start-menu {
-      position: fixed;
-      left: 12px;
-      bottom: 62px;
-      width: min(360px, calc(100vw - 24px));
-      padding: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 18px;
-      background:
-        linear-gradient(180deg, rgba(40, 44, 54, 0.98), rgba(20, 22, 28, 0.96)),
-        rgba(20, 22, 28, 0.92);
-      box-shadow: 0 24px 44px rgba(0, 0, 0, 0.42);
-      backdrop-filter: blur(18px);
-      color: var(--text);
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transform: translateY(16px) scale(0.98);
-      transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
-      z-index: 8;
-    }
-
-    .start-menu.is-open {
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-      transform: translateY(0) scale(1);
-    }
-
-    .start-menu-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-
-    .start-menu-avatar {
-      width: 54px;
-      height: 54px;
-      display: grid;
-      place-items: center;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #1988ff, #00b0ff);
-      color: #ffffff;
-      font-size: 1.1rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.28);
-      flex: 0 0 auto;
-    }
-
-    .start-menu-badge,
-    .start-menu-title,
-    .start-menu-subtitle,
-    .start-menu-footnote {
-      margin: 0;
-    }
-
-    .start-menu-badge {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.62);
-    }
-
-    .start-menu-title {
-      margin-top: 4px;
-      font-size: 1.15rem;
-      font-weight: 700;
-    }
-
-    .start-menu-subtitle {
-      margin-top: 4px;
-      color: rgba(245, 248, 255, 0.74);
-      font-size: 0.9rem;
-      line-height: 1.45;
-    }
-
-    .start-menu-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .start-contact-card {
-      min-height: 126px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.06);
-      color: inherit;
-      text-decoration: none;
-      transition: transform 0.16s ease, background-color 0.16s ease, border-color 0.16s ease;
-    }
-
-    .start-contact-card:hover,
-    .start-contact-card:focus-visible {
-      transform: translateY(-2px);
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-      outline: none;
-    }
-
-    .start-contact-card.wide {
-      grid-column: 1 / -1;
-      min-height: 110px;
-    }
-
-    .start-contact-card.is-placeholder {
-      border-style: dashed;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .start-contact-kind {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255, 255, 255, 0.62);
-    }
-
-    .start-contact-value {
-      display: block;
-      font-size: 1rem;
-      font-weight: 600;
-      line-height: 1.35;
-      word-break: break-word;
-    }
-
-    .start-contact-action {
-      color: rgba(245, 248, 255, 0.76);
-      font-size: 0.88rem;
-      line-height: 1.45;
-    }
-
-    .start-menu-footnote {
-      margin-top: 14px;
-      color: rgba(245, 248, 255, 0.68);
-      font-size: 0.82rem;
-      line-height: 1.45;
-    }
-
-    .tray-item {
-      min-width: 30px;
-      padding: 0 8px;
-      font-size: 0.86rem;
-      color: rgba(255, 255, 255, 0.88);
-    }
-
-    .clock {
-      padding: 0 10px;
-      text-align: right;
-      line-height: 1.05;
-    }
-
-    .clock-time {
-      display: block;
-      font-size: 0.84rem;
-      font-weight: 600;
-    }
-
-    .clock-date {
-      display: block;
-      font-size: 0.74rem;
-      color: var(--muted);
-    }
-
-    @media (max-width: 720px) {
-      .desktop-icons {
-        display: flex;
-        flex-wrap: wrap;
-        align-content: flex-start;
-        gap: 10px;
-        min-height: auto;
-      }
-
-      .desktop-file {
-        position: relative;
-        top: auto;
-        left: auto;
-        width: 112px;
-      }
-
-      .modal-backdrop {
-        padding: 12px;
-      }
-
-      .notepad-window {
-        height: min(640px, calc(100vh - 24px));
-      }
-
-      .window-menubar {
-        gap: 10px;
-        font-size: 0.8rem;
-      }
-
-      .taskbar {
-        height: 56px;
-        padding: 0 6px;
-      }
-
-      .taskbar-search {
-        width: 136px;
-      }
-
-      .start-menu {
-        left: 8px;
-        right: 8px;
-        bottom: 64px;
-        width: auto;
-      }
-
-      .start-menu-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .start-contact-card.wide {
-        grid-column: auto;
-      }
-
-      .tray-item.language {
-        display: none;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RTPHM DEV — Digital Engineering</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Spline -->
+    <script type="module"
+        src="https://unpkg.com/@splinetool/viewer@1.10.58/build/spline-viewer.js">
+    </script>
+
+    <style>
+
+        /* =========================================================
+           GLOBAL
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #030303;
+            --black-soft: #0a0a0a;
+            --gold: #d4af37;
+            --gold-light: #f4d77a;
+            --gold-dark: #8c6a16;
+            --white: #f4f4f0;
+            --muted: rgba(255, 255, 255, 0.62);
+            --border: rgba(212, 175, 55, 0.16);
+            --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+            --font-body: "Jost", Arial, Helvetica, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background: var(--black);
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-body);
+            overflow: hidden;
+        }
+
+        button,
+        a {
+            font-family: inherit;
+        }
+
+
+        /* =========================================================
+           GLOBAL BACKGROUND
+        ========================================================= */
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                radial-gradient(
+                    circle at 15% 15%,
+                    rgba(212, 175, 55, 0.08),
+                    transparent 25%
+                ),
+                radial-gradient(
+                    circle at 85% 30%,
+                    rgba(212, 175, 55, 0.05),
+                    transparent 22%
+                ),
+                radial-gradient(
+                    circle at 50% 90%,
+                    rgba(255, 255, 255, 0.025),
+                    transparent 25%
+                );
+
+            filter: blur(20px);
+
+            z-index: 0;
+        }
+
+
+        /* =========================================================
+           LANDING PAGE
+        ========================================================= */
+
+        #landing {
+            position: fixed;
+            inset: 0;
+
+            width: 100%;
+            height: 100vh;
+
+            background: #000;
+
+            z-index: 100;
+
+            opacity: 1;
+            visibility: visible;
+
+            transition:
+                opacity 1.5s cubic-bezier(.77, 0, .18, 1),
+                visibility 1.5s;
+        }
+
+        #landing.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+
+        /* Spline */
+
+        spline-viewer {
+            position: absolute;
+            inset: 0;
+
+            width: 100%;
+            height: 100%;
+
+            display: block;
+        }
+
+
+        /* Cinematic overlay */
+
+        .landing-overlay {
+            position: absolute;
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    transparent 25%,
+                    rgba(0, 0, 0, 0.18) 55%,
+                    rgba(0, 0, 0, 0.75) 100%
+                );
+
+            z-index: 2;
+        }
+
+
+        /* Top cinematic line */
+
+        .landing-top-line {
+            position: absolute;
+
+            top: 0;
+            left: 50%;
+
+            width: 1px;
+            height: 18vh;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    transparent,
+                    rgba(212, 175, 55, 0.6),
+                    transparent
+                );
+
+            transform: translateX(-50%);
+
+            opacity: 0;
+
+            animation: topLineReveal 2s ease forwards;
+            animation-delay: 1s;
+
+            z-index: 3;
+        }
+
+
+        /* Landing text */
+
+        .landing-brand {
+            position: absolute;
+
+            top: 7%;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            text-align: center;
+
+            z-index: 4;
+
+            opacity: 0;
+
+            animation: brandReveal 1.6s ease forwards;
+            animation-delay: 0.8s;
+        }
+
+        .landing-brand-small {
+            font-family: var(--font-body);
+            font-size: 10px;
+
+            letter-spacing: 7px;
+
+            text-transform: uppercase;
+
+            color: rgba(255, 255, 255, 0.5);
+
+            margin-bottom: 12px;
+        }
+
+        .landing-brand-name {
+            font-family: var(--font-display);
+
+            font-size: clamp(20px, 3vw, 32px);
+
+            letter-spacing: 9px;
+
+            color: var(--gold-light);
+
+            text-shadow:
+                0 0 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .landing-chevron {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 16px;
+        }
+
+        .landing-chevron span {
+            width: 9px;
+            height: 9px;
+            border-top: 1px solid rgba(212, 175, 55, 0.55);
+            border-right: 1px solid rgba(212, 175, 55, 0.55);
+            transform: rotate(45deg);
+            opacity: 0.7;
+        }
+
+        .landing-chevron span:nth-child(2) { opacity: 1; }
+
+
+        /* Discover */
+
+        .enter-container {
+            position: absolute;
+
+            left: 50%;
+            bottom: 8%;
+
+            transform: translateX(-50%);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            text-align: center;
+
+            z-index: 5;
+
+            opacity: 0;
+
+            animation: enterReveal 1.5s ease forwards;
+            animation-delay: 1.5s;
+        }
+
+        .enter-button {
+            position: relative;
+
+            min-width: 190px;
+
+            padding: 16px 38px;
+
+            background: rgba(0, 0, 0, 0.35);
+
+            border: 1px solid rgba(212, 175, 55, 0.65);
+
+            color: var(--gold-light);
+
+            font-size: 11px;
+
+            letter-spacing: 5px;
+
+            text-transform: uppercase;
+
+            cursor: pointer;
+
+            overflow: hidden;
+
+            backdrop-filter: blur(10px);
+
+            transition:
+                color 0.4s ease,
+                background 0.4s ease,
+                border-color 0.4s ease,
+                box-shadow 0.4s ease,
+                transform 0.4s ease;
+        }
+
+        .enter-button::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: -120%;
+
+            width: 80%;
+            height: 100%;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(255,255,255,0.3),
+                    transparent
+                );
+
+            transform: skewX(-20deg);
+
+            transition: left 0.7s ease;
+        }
+
+        .enter-button:hover::before {
+            left: 140%;
+        }
+
+        .enter-button:hover {
+            background: rgba(212, 175, 55, 0.12);
+
+            border-color: var(--gold-light);
+
+            color: #fff;
+
+            box-shadow:
+                0 0 25px rgba(212, 175, 55, 0.2),
+                inset 0 0 20px rgba(212, 175, 55, 0.05);
+
+            transform: translateY(-3px);
+        }
+
+        .enter-subtitle {
+            margin-top: 16px;
+
+            font-size: 9px;
+
+            letter-spacing: 4px;
+
+            text-transform: uppercase;
+
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+
+        /* =========================================================
+           HOME
+        ========================================================= */
+
+        #home {
+            position: relative;
+
+            width: 100%;
+            height: 100vh;
+
+            overflow-y: auto;
+            overflow-x: hidden;
+
+            background:
+                radial-gradient(
+                    circle at 50% 0%,
+                    rgba(212, 175, 55, 0.10),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 10% 50%,
+                    rgba(212, 175, 55, 0.025),
+                    transparent 25%
+                ),
+                #030303;
+
+            opacity: 0;
+
+            transform: scale(1.025);
+
+            transition:
+                opacity 1.5s cubic-bezier(.16, 1, .3, 1),
+                transform 1.8s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        #home.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+
+        /* Futuristic grid */
+
+        #home::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(212, 175, 55, 0.035) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(212, 175, 55, 0.035) 1px,
+                    transparent 1px
+                );
+
+            background-size: 80px 80px;
+
+            mask-image:
+                radial-gradient(
+                    ellipse at center,
+                    black 0%,
+                    transparent 75%
+                );
+
+            z-index: 0;
+        }
+
+
+        /* Moving light */
+
+        #home::after {
+            content: "";
+
+            position: fixed;
+
+            width: 600px;
+            height: 600px;
+
+            top: -300px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(212, 175, 55, 0.07),
+                    transparent 70%
+                );
+
+            pointer-events: none;
+
+            animation: ambientGlow 8s ease-in-out infinite alternate;
+
+            z-index: 0;
+        }
+
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .header {
+            position: sticky;
+
+            top: 0;
+
+            width: 100%;
+
+            min-height: 150px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 25px 20px;
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    rgba(3, 3, 3, 0.96),
+                    rgba(3, 3, 3, 0.72),
+                    transparent
+                );
+
+            backdrop-filter: blur(18px);
+
+            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+
+            z-index: 10;
+
+            transition:
+                min-height 0.5s ease,
+                padding 0.5s ease,
+                background 0.5s ease;
+        }
+
+        .header::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 50%;
+
+            width: 1px;
+            height: 35px;
+
+            transform: translateX(-50%);
+
+            background:
+                linear-gradient(
+                    to bottom,
+                    var(--gold),
+                    transparent
+                );
+
+            opacity: 0.6;
+        }
+
+        .header::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: -1px;
+            left: 50%;
+
+            width: 110px;
+            height: 1px;
+
+            transform: translateX(-50%);
+
+            background: var(--gold);
+
+            box-shadow:
+                0 0 10px rgba(212, 175, 55, 0.5),
+                0 0 30px rgba(212, 175, 55, 0.15);
+        }
+
+        .header.shrink {
+            min-height: 90px;
+
+            padding: 12px 20px;
+
+            background:
+                rgba(3, 3, 3, 0.92);
+        }
+
+
+        /* =========================================================
+           LOGO
+        ========================================================= */
+
+        .logo-wrap {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-wrap::before {
+            content: "";
+            position: absolute;
+            width: 120%;
+            height: 120%;
+            border: 1px solid rgba(212, 175, 55, 0.18);
+            border-radius: 50%;
+            opacity: 0;
+            animation: ringAppear 1.8s cubic-bezier(.16,1,.3,1) forwards;
+            animation-delay: 0.6s;
+            pointer-events: none;
+        }
+
+        .logo {
+            width: min(200px, 56vw);
+            max-height: 300px;
+
+            height: auto;
+
+            display: block;
+
+            opacity: 0;
+
+            transform:
+                translateY(-25px)
+                scale(0.9);
+
+            filter:
+                drop-shadow(
+                    0 0 8px rgba(212, 175, 55, 0.18)
+                )
+                drop-shadow(
+                    0 0 30px rgba(212, 175, 55, 0.08)
+                );
+
+            animation:
+                logoAppear 1.7s
+                cubic-bezier(.16, 1, .3, 1)
+                forwards;
+
+            animation-delay: 0.4s;
+
+            transition:
+                width 0.5s ease,
+                filter 0.5s ease,
+                transform 0.5s ease;
+        }
+
+        .header.shrink .logo {
+            width: 150px;
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            position: relative;
+
+            min-height: calc(100vh - 150px);
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            text-align: center;
+
+            padding:
+                80px 25px
+                120px;
+
+            z-index: 2;
+        }
+
+
+        /* Small label */
+
+        .hero-eyebrow {
+            display: flex;
+
+            align-items: center;
+            gap: 15px;
+
+            margin-bottom: 25px;
+
+            font-size: 9px;
+
+            letter-spacing: 5px;
+
+            text-transform: uppercase;
+
+            color: rgba(212, 175, 55, 0.75);
+
+            opacity: 0;
+
+            animation:
+                heroElementAppear
+                1.2s
+                ease
+                forwards;
+
+            animation-delay: 1s;
+        }
+
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: "";
+
+            width: 35px;
+            height: 1px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--gold)
+                );
+        }
+
+        .hero-eyebrow::after {
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--gold),
+                    transparent
+                );
+        }
+
+
+        .hero h1 {
+            max-width: 1000px;
+
+            font-family: var(--font-display);
+
+            font-size: clamp(
+                46px,
+                7vw,
+                90px
+            );
+
+            font-weight: 500;
+
+            line-height: 0.98;
+
+            letter-spacing: -2px;
+
+            color: #f5f2ec;
+
+            opacity: 0;
+
+            animation:
+                heroElementAppear
+                1.4s
+                cubic-bezier(.16, 1, .3, 1)
+                forwards;
+
+            animation-delay: 1.15s;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold-light);
+        }
+
+
+        /* Gold accent */
+
+        .gold-line {
+            position: relative;
+
+            width: 75px;
+            height: 1px;
+
+            margin: 35px auto;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--gold),
+                    transparent
+                );
+
+            box-shadow:
+                0 0 12px rgba(212, 175, 55, 0.35);
+
+            opacity: 0;
+
+            animation:
+                lineAppear
+                1.2s
+                ease
+                forwards;
+
+            animation-delay: 1.45s;
+        }
+
+        .gold-line::before {
+            content: "";
+
+            position: absolute;
+
+            width: 5px;
+            height: 5px;
+
+            left: 50%;
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%)
+                rotate(45deg);
+
+            background: var(--gold);
+
+            box-shadow:
+                0 0 10px rgba(212, 175, 55, 0.7);
+        }
+
+
+        /* Description */
+
+        .hero-description {
+            max-width: 680px;
+
+            color: var(--muted);
+
+            font-size: 16px;
+            font-weight: 300;
+
+            line-height: 1.9;
+
+            letter-spacing: 0.3px;
+
+            opacity: 0;
+
+            animation:
+                heroElementAppear
+                1.3s
+                ease
+                forwards;
+
+            animation-delay: 1.6s;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 48px;
+            margin-top: 56px;
+
+            opacity: 0;
+            animation: heroElementAppear 1.3s ease forwards;
+            animation-delay: 1.85s;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-number {
+            font-family: var(--font-display);
+            font-size: clamp(22px, 3vw, 30px);
+            color: var(--gold-light);
+        }
+
+        .hero-stat-label {
+            margin-top: 6px;
+            font-size: 9px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+
+        /* =========================================================
+           VIDEO SECTION
+        ========================================================= */
+
+        .cards-section {
+            position: relative;
+
+            width: 100%;
+
+            max-width: 1250px;
+
+            margin: 0 auto;
+
+            padding:
+                80px 25px
+                140px;
+
+            z-index: 2;
+        }
+
+
+        .section-header {
+            display: flex;
+
+            align-items: center;
+            justify-content: space-between;
+
+            margin-bottom: 45px;
+        }
+
+        .section-heading-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .section-kicker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            color: var(--gold);
+
+            font-size: 9px;
+
+            letter-spacing: 4px;
+
+            text-transform: uppercase;
+        }
+
+        .section-kicker::before {
+            content: "";
+            width: 18px;
+            height: 1px;
+            background: var(--gold);
+        }
+
+        .cards-heading {
+            font-family: var(--font-display);
+
+            font-size: clamp(
+                28px,
+                4vw,
+                42px
+            );
+
+            font-weight: 500;
+
+            color: #f5f2ec;
+        }
+
+
+        /* Grid */
+
+        .cards-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(260px, 1fr)
+                );
+
+            gap: 22px;
+        }
+
+
+        /* Video card */
+
+        .project-category {
+            margin-bottom: 56px;
+        }
+
+        .project-category h3 {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 22px;
+            color: rgba(255, 255, 255, 0.55);
+            text-transform: uppercase;
+            letter-spacing: 0.28em;
+        }
+
+        .project-category h3::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(212,175,55,0.3), transparent);
+        }
+
+        .project-card {
+            position: relative;
+            min-height: 320px;
+            border-radius: 18px;
+            overflow: hidden;
+            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.35));
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            cursor: pointer;
+            box-shadow: 0 32px 90px rgba(0, 0, 0, 0.24);
+            transition: transform 0.45s ease, border-color 0.35s ease, box-shadow 0.45s ease;
+            display: grid;
+            grid-template-rows: 1fr auto;
+            backdrop-filter: blur(10px);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 42px 120px rgba(0, 0, 0, 0.35), 0 0 40px rgba(212, 175, 55, 0.06);
+        }
+
+        .project-card video,
+        .project-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            min-height: 240px;
+            transition: transform 0.45s ease, opacity 0.45s ease, filter 0.45s ease;
+        }
+
+        .project-card:hover video,
+        .project-card:hover img {
+            transform: scale(1.04);
+            filter: brightness(0.84);
+        }
+
+        .project-card-content {
+            padding: 22px 22px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .project-name-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .project-tag {
+            font-size: 0.65rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            opacity: 0.85;
+        }
+
+        .project-name {
+            font-family: var(--font-display);
+            color: #f5f2ec;
+            font-size: 1.05rem;
+            letter-spacing: 0.02em;
+        }
+
+        .project-action {
+            min-width: 120px;
+            padding: 11px 16px;
+            border: 1px solid rgba(212, 175, 55, 0.6);
+            border-radius: 999px;
+            background: rgba(212, 175, 55, 0.08);
+            color: #f5f2ec;
+            font-size: 0.72rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .project-action:hover {
+            background: rgba(212, 175, 55, 0.18);
+            border-color: rgba(212, 175, 55, 0.95);
+            transform: translateY(-1px);
+        }
+
+        .video-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 36px;
+            height: 36px;
+            border-top: 1px solid var(--gold);
+            border-left: 1px solid var(--gold);
+            opacity: 0.5;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .project-label {
+            position: absolute;
+            left: 22px;
+            bottom: 24px;
+            color: #fff;
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            z-index: 3;
+        }
+
+        .video-card:hover .project-label {
+            color: var(--gold-light);
+        }
+
+
+        /* =========================================================
+           INFO MODAL
+        ========================================================= */
+
+        .info-modal {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(16px);
+            z-index: 210;
+            padding: 24px;
+        }
+
+        .info-modal.open {
+            display: flex;
+            animation: modalFade 0.32s ease;
+        }
+
+        .info-modal-content {
+            width: min(900px, 100%);
+            border-radius: 28px;
+            background: rgba(10, 10, 10, 0.96);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 60px 160px rgba(0, 0, 0, 0.65);
+            padding: 32px;
+            position: relative;
+            color: #ece9df;
+        }
+
+        .info-modal-content h3 {
+            font-family: var(--font-display);
+            margin-bottom: 16px;
+            font-size: clamp(1.9rem, 3.5vw, 2.4rem);
+            letter-spacing: 0.01em;
+        }
+
+        .info-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 18px;
+            margin-bottom: 24px;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .info-meta span {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .info-description {
+            font-size: 1rem;
+            font-weight: 300;
+            line-height: 1.9;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .info-modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.35);
+            cursor: pointer;
+            font-size: 24px;
+            transition: background 0.2s ease;
+        }
+
+        .info-modal-close:hover {
+            background: rgba(212, 175, 55, 0.18);
+        }
+
+
+        /* =========================================================
+           VIDEO MODAL
+        ========================================================= */
+
+        .video-modal {
+            position: fixed;
+
+            inset: 0;
+
+            display: none;
+
+            align-items: center;
+            justify-content: center;
+
+            background:
+                rgba(0, 0, 0, 0.94);
+
+            backdrop-filter: blur(15px);
+
+            z-index: 200;
+
+            padding: 25px;
+        }
+
+        .video-modal.open {
+            display: flex;
+
+            animation:
+                modalFade 0.35s ease;
+        }
+
+        .video-modal-content {
+            position: relative;
+
+            width: min(1100px, 100%);
+
+            border:
+                1px solid
+                rgba(212, 175, 55, 0.25);
+
+            background: #030303;
+
+            box-shadow:
+                0 50px 150px rgba(0, 0, 0, 0.8),
+                0 0 60px rgba(212, 175, 55, 0.04);
+        }
+
+        .video-modal video {
+            width: 100%;
+
+            height: auto;
+
+            max-height: 82vh;
+
+            display: block;
+        }
+
+
+        /* Close button */
+
+        .modal-close {
+            position: absolute;
+
+            top: 15px;
+            right: 15px;
+
+            width: 42px;
+            height: 42px;
+
+            border:
+                1px solid
+                rgba(212, 175, 55, 0.4);
+
+            background:
+                rgba(0, 0, 0, 0.65);
+
+            color: var(--gold-light);
+
+            font-size: 22px;
+
+            cursor: pointer;
+
+            display: grid;
+            place-items: center;
+
+            z-index: 5;
+
+            transition:
+                background 0.3s ease,
+                color 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--gold);
+
+            color: #000;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .footer {
+            position: relative;
+            z-index: 2;
+
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+
+            padding: 60px 25px 40px;
+
+            text-align: center;
+        }
+
+        .footer-mark {
+            font-family: var(--font-display);
+            font-size: 22px;
+            letter-spacing: 4px;
+            color: var(--gold-light);
+            margin-bottom: 10px;
+        }
+
+        .footer-tagline {
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.35);
+            margin-bottom: 30px;
+        }
+
+        .footer-bottom {
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.25);
+        }
+
+
+        /* =========================================================
+           ANIMATIONS
+        ========================================================= */
+
+        @keyframes topLineReveal {
+            from {
+                opacity: 0;
+                height: 0;
+            }
+
+            to {
+                opacity: 1;
+                height: 18vh;
+            }
+        }
+
+        @keyframes brandReveal {
+            from {
+                opacity: 0;
+                transform:
+                    translateX(-50%)
+                    translateY(-15px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateX(-50%)
+                    translateY(0);
+            }
+        }
+
+        @keyframes enterReveal {
+            from {
+                opacity: 0;
+                transform:
+                    translateX(-50%)
+                    translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform:
+                    translateX(-50%)
+                    translateY(0);
+            }
+        }
+
+        @keyframes ringAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes logoAppear {
+            0% {
+                opacity: 0;
+
+                transform:
+                    translateY(-30px)
+                    scale(0.88);
+
+                filter:
+                    blur(8px)
+                    drop-shadow(
+                        0 0 0 rgba(212, 175, 55, 0)
+                    );
+            }
+
+            65% {
+                opacity: 1;
+
+                transform:
+                    translateY(5px)
+                    scale(1.02);
+            }
+
+            100% {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
+
+                filter:
+                    blur(0)
+                    drop-shadow(
+                        0 0 10px
+                        rgba(212, 175, 55, 0.2)
+                    );
+            }
+        }
+
+        @keyframes heroElementAppear {
+            from {
+                opacity: 0;
+                transform: translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes lineAppear {
+            from {
+                opacity: 0;
+                width: 0;
+            }
+
+            to {
+                opacity: 1;
+                width: 75px;
+            }
+        }
+
+        @keyframes ambientGlow {
+            from {
+                transform:
+                    translateX(-50%)
+                    scale(0.9);
+                opacity: 0.6;
+            }
+
+            to {
+                transform:
+                    translateX(-50%)
+                    scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        @keyframes modalFade {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 700px) {
+
+            .landing-brand {
+                top: 5%;
+            }
+
+            .landing-brand-name {
+                font-size: 18px;
+                letter-spacing: 6px;
+            }
+
+            .enter-button {
+                min-width: 165px;
+                padding: 14px 25px;
+            }
+
+            .header {
+                min-height: 120px;
+            }
+
+            .logo {
+                width: min(250px, 68vw);
+            }
+
+            .header.shrink .logo {
+                width: 130px;
+            }
+
+            .hero {
+                min-height: calc(100vh - 120px);
+
+                padding:
+                    60px 20px
+                    100px;
+            }
+
+            .hero h1 {
+                letter-spacing: -1.5px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+                line-height: 1.8;
+            }
+
+            .hero-stats {
+                gap: 30px;
+            }
+
+            .cards-section {
+                padding:
+                    60px 18px
+                    100px;
+            }
+
+            .section-header {
+                margin-bottom: 30px;
+            }
+
+            .video-card {
+                min-height: 250px;
+            }
+
+            .video-card video {
+                min-height: 250px;
+            }
+        }
+
+
+        /* =========================================================
+           REDUCED MOTION
+        ========================================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+
+    </style>
 </head>
+
+
 <body>
-  <main class="desktop">
-    <div class="desktop-icons" aria-label="Desktop files">
-      <button class="desktop-file" style="--file-top: 30px; --file-left: 28px;" type="button" data-document-button data-file="cv.txt" data-title="cv.txt - Notepad" aria-haspopup="dialog" aria-controls="document-modal" aria-expanded="false">
-        <span class="file-icon" aria-hidden="true">
-          <span class="file-lines"></span>
-        </span>
-        <span class="file-name">cv.txt</span>
-      </button>
 
-      <button class="desktop-file" style="--file-top: 40vh; --file-left: 43vw;" type="button" data-document-button data-file="projects.txt" data-title="projects.txt - Notepad" aria-haspopup="dialog" aria-controls="document-modal" aria-expanded="false">
-        <span class="file-icon" aria-hidden="true">
-          <span class="file-lines"></span>
-        </span>
-        <span class="file-name">projects.txt</span>
-      </button>
 
-      <button class="desktop-file" style="--file-top: 96px; --file-left: calc(100% - 220px);" type="button" data-video-button data-video-label="chevron.mp4" data-video-src="videos/end(1).mp4" data-video-title="chevron.mp4 - Media Player" aria-haspopup="dialog" aria-controls="video-modal" aria-expanded="false">
-        <span class="file-icon video" aria-hidden="true">
-          <span class="file-play"></span>
-        </span>
-        <span class="file-name">chevron.mp4</span>
-      </button>
+    <!-- =========================================================
+         SPLINE LANDING
+    ========================================================= -->
 
-      <button class="desktop-file" style="--file-top: 248px; --file-left: calc(100% - 236px);" type="button" data-video-button data-video-label="ihm-final (1).mp4" data-video-src="videos/ihm-final (1).mp4" data-video-title="ihm-final (1).mp4 - Media Player" data-video-note="Guide: at 1:00 in this video, the first website shown is the older version of the site I created." aria-haspopup="dialog" aria-controls="video-modal" aria-expanded="false">
-        <span class="file-icon video" aria-hidden="true">
-          <span class="file-play"></span>
-        </span>
-        <span class="file-name">ihm-final (1).mp4</span>
-      </button>
-    </div>
-  </main>
+    <section id="landing">
 
-  <div class="modal-backdrop" id="document-modal" aria-hidden="true">
-    <section class="notepad-window" role="dialog" aria-modal="true" aria-labelledby="window-title">
-      <header class="window-titlebar">
-        <div class="window-title">
-          <span class="notepad-icon" aria-hidden="true"></span>
-          <span id="window-title">cv.txt - Notepad</span>
+        <spline-viewer
+            url="https://prod.spline.design/bkcsl88eUKkHLzL5/scene.splinecode">
+        </spline-viewer>
+
+        <div class="landing-overlay"></div>
+
+        <div class="landing-top-line"></div>
+
+        <div class="landing-brand">
+
+            <div class="landing-brand-small">
+                Digital Engineering
+            </div>
+
+            <div class="landing-brand-name">
+                RTPHM DEV
+            </div>
+
+            <div class="landing-chevron">
+                <span></span><span></span><span></span>
+            </div>
+
         </div>
 
-        <div class="window-controls" aria-label="Window controls">
-          <button class="window-control" id="minimize-modal" type="button" aria-label="Minimize">_</button>
-          <button class="window-control" id="maximize-modal" type="button" aria-label="Maximize">[]</button>
-          <button class="window-control close" id="close-modal" type="button" aria-label="Close">X</button>
+
+        <div class="enter-container">
+
+            <button
+                class="enter-button"
+                onclick="enterWebsite()">
+
+                Découvrir
+
+            </button>
+
+            <div class="enter-subtitle">
+                Entrez dans notre univers
+            </div>
+
         </div>
-      </header>
 
-      <nav class="window-menubar" aria-label="Notepad menu">
-        <span>File</span>
-        <span>Edit</span>
-        <span>Format</span>
-        <span>View</span>
-        <span>Help</span>
-      </nav>
-
-      <div class="editor-shell">
-        <div class="editor-area" id="document-content" tabindex="0" role="textbox" aria-readonly="true"></div>
-      </div>
-
-      <footer class="statusbar">
-        <span class="status-file" id="status-file">No file open</span>
-        <span>100%</span>
-        <span>Windows (CRLF)</span>
-        <span>UTF-8</span>
-      </footer>
     </section>
-  </div>
 
-  <div class="modal-backdrop" id="video-modal" aria-hidden="true">
-    <section class="media-window" role="dialog" aria-modal="true" aria-labelledby="video-window-title">
-      <header class="window-titlebar">
-        <div class="window-title">
-          <span class="notepad-icon" aria-hidden="true"></span>
-          <span id="video-window-title">chevron.mp4 - Media Player</span>
+
+
+    <!-- =========================================================
+         HOME
+    ========================================================= -->
+
+    <main id="home">
+
+
+        <!-- HEADER -->
+
+        <header class="header">
+
+            <div class="logo-wrap">
+                <img
+                    src="img/logo.png"
+                    alt="RTPHM DEV"
+                    class="logo">
+            </div>
+
+        </header>
+
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-eyebrow">
+                Digital Engineering
+            </div>
+
+            <h1>
+                Qui <em>sommes</em>-nous
+            </h1>
+
+            <div class="gold-line"></div>
+
+            <p class="hero-description">
+                RTPHM-DEV, créée en 2024, place l'innovation et la créativité au cœur du développement numérique. Nous sommes une équipe passionnée de développeurs, designers et ingénieurs qui conçoivent des solutions digitales percutantes et des sites web de luxe, pensés pour présenter votre marque et affirmer sa place sur le marché. Notre mission : transformer chaque idée en expérience numérique d'exception, portée par les technologies et méthodologies les plus avancées.
+            </p>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-number">2024</div>
+                    <div class="hero-stat-label">Fondation</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">100%</div>
+                    <div class="hero-stat-label">Sur-mesure</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-number">DZ</div>
+                    <div class="hero-stat-label">Algérie & au-delà</div>
+                </div>
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             PROJECTS
+        ===================================================== -->
+
+        <section class="cards-section">
+
+            <div class="section-header">
+
+                <div class="section-heading-wrap">
+
+                    <span class="section-kicker">
+                        Projets sélectionnés
+                    </span>
+
+                    <h2 class="cards-heading">
+                        Nos Projets
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="project-category">
+                <h3>Projets Web</h3>
+                <div class="cards-grid">
+
+                    <article
+                        class="project-card video-card"
+                        data-type="video"
+                        data-src="videos/argoub-site.mp4"
+                        data-title="Argoub Site"
+                        data-date="Mai 2025"
+                        data-description="Site vitrine haut de gamme avec navigation fluide, détails produits enrichis et une approche élégante pour le luxe digital."
+                    >
+                        <video
+                            muted
+                            loop
+                            preload="metadata"
+                            playsinline
+                            src="videos/argoub-site.mp4">
+                        </video>
+                        <div class="project-card-content">
+                            <div class="project-name-wrap">
+                                <span class="project-tag">Site vitrine</span>
+                                <div class="project-name">Argoub Site</div>
+                            </div>
+                            <button class="project-action">Lire plus</button>
+                        </div>
+                    </article>
+
+                    <article
+                        class="project-card video-card"
+                        data-type="video"
+                        data-src="videos/END (1).mp4"
+                        data-title="Chevron Paris"
+                        data-date="Juin 2025"
+                        data-description="Identité digitale inspirée du chic parisien : motif chevron en fil conducteur, transitions cinématiques et direction artistique conçue pour capter l'attention dès les premières secondes."
+                    >
+                        <video
+                            muted
+                            loop
+                            preload="metadata"
+                            playsinline
+                            src="videos/END (1).mp4">
+                        </video>
+                        <div class="project-card-content">
+                            <div class="project-name-wrap">
+                                <span class="project-tag">Identité digitale</span>
+                                <div class="project-name">Chevron Paris</div>
+                            </div>
+                            <button class="project-action">Lire plus</button>
+                        </div>
+                    </article>
+
+                    <article
+                        class="project-card video-card"
+                        data-type="video"
+                        data-src="videos/ihm-final (1).mp4"
+                        data-title="Splendide-DZ"
+                        data-date="Mars 2025"
+                        data-description="Site vitrine or et noir pensé pour une maison de cosmétiques : ambiance feutrée, mise en valeur des produits et parcours utilisateur épuré pour une expérience résolument esthétique."
+                    >
+                        <video
+                            muted
+                            loop
+                            preload="metadata"
+                            playsinline
+                            src="videos/ihm-final (1).mp4">
+                        </video>
+                        <div class="project-card-content">
+                            <div class="project-name-wrap">
+                                <span class="project-tag">Cosmétiques</span>
+                                <div class="project-name">Splendide-DZ</div>
+                            </div>
+                            <button class="project-action">Lire plus</button>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+
+            <div class="project-category">
+                <h3>Projets Design</h3>
+                <div class="cards-grid">
+
+                    <article
+                        class="project-card image-card"
+                        data-type="image"
+                        data-src="img/design1-1.jpeg"
+                        data-title="Design 1"
+                        data-date="Janvier 2025"
+                        data-description="Concept visuel inspiré par le luxe minimaliste, conçu pour présenter une image de marque élégante et cohérente."
+                    >
+                        <img src="img/design1-1.jpeg" alt="Design 1" loading="lazy">
+                        <div class="project-card-content">
+                            <div class="project-name-wrap">
+                                <span class="project-tag">Direction artistique</span>
+                                <div class="project-name">Design 1</div>
+                            </div>
+                            <button class="project-action">Lire plus</button>
+                        </div>
+                    </article>
+
+                    <article
+                        class="project-card image-card"
+                        data-type="image"
+                        data-src="img/design2.jpeg"
+                        data-title="Design 2"
+                        data-date="Février 2025"
+                        data-description="Projet d'expérience visuelle haut de gamme avec une composition d'images et une direction stylistique impactante."
+                    >
+                        <img src="img/design2.jpeg" alt="Design 2" loading="lazy">
+                        <div class="project-card-content">
+                            <div class="project-name-wrap">
+                                <span class="project-tag">Direction artistique</span>
+                                <div class="project-name">Design 2</div>
+                            </div>
+                            <button class="project-action">Lire plus</button>
+                        </div>
+                    </article>
+
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer class="footer">
+            <div class="footer-mark">RTPHM DEV</div>
+            <div class="footer-tagline">Digital Engineering — Alger, Algérie</div>
+            <div class="footer-bottom">&copy; 2025 RTPHM DEV. Tous droits réservés.</div>
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+         VIDEO MODAL
+    ========================================================= -->
+
+    <div
+        class="video-modal"
+        id="videoModal">
+
+        <div class="video-modal-content">
+
+            <button
+                class="modal-close"
+                id="modalClose"
+                aria-label="Close video">
+
+                ×
+
+            </button>
+
+            <video
+                id="modalVideo"
+                controls
+                playsinline>
+            </video>
+
         </div>
 
-        <div class="window-controls" aria-label="Window controls">
-          <button class="window-control" id="minimize-video-modal" type="button" aria-label="Minimize">_</button>
-          <button class="window-control" id="maximize-video-modal" type="button" aria-label="Maximize">[]</button>
-          <button class="window-control close" id="close-video-modal" type="button" aria-label="Close">X</button>
+    </div>
+
+    <div
+        class="info-modal"
+        id="infoModal">
+
+        <div class="info-modal-content">
+
+            <button
+                class="info-modal-close"
+                id="infoModalClose"
+                aria-label="Close details">
+
+                ×
+
+            </button>
+
+            <h3 id="infoTitle">Project Title</h3>
+
+            <div class="info-meta">
+                <span id="infoDate">Date</span>
+                <span id="infoType">Type</span>
+            </div>
+
+            <p class="info-description" id="infoDescription">
+                Project details will appear here when you click Lire plus.
+            </p>
+
         </div>
-      </header>
 
-      <nav class="media-toolbar" aria-label="Media toolbar">
-        <span>Now Playing</span>
-        <span id="video-toolbar-path">videos/end(1).mp4</span>
-      </nav>
-
-      <div class="media-note is-hidden" id="video-note" role="note" aria-live="polite"></div>
-
-      <div class="media-stage">
-        <video
-          class="media-player"
-          id="video-player"
-          controls
-          preload="metadata"
-          playsinline
-          src="videos/end(1).mp4"
-        ></video>
-      </div>
-
-      <footer class="statusbar">
-        <span class="status-file" id="video-status-file">chevron.mp4</span>
-        <span>MP4</span>
-        <span id="video-status-path">videos/end(1).mp4</span>
-      </footer>
-    </section>
-  </div>
-
-  <section class="start-menu" id="start-menu" aria-label="Start menu" aria-hidden="true">
-    <div class="start-menu-header">
-      <div class="start-menu-avatar" aria-hidden="true">DW</div>
-      <div>
-        <p class="start-menu-badge">Contact Hub</p>
-        <h2 class="start-menu-title">Dif Walid</h2>
-        <p class="start-menu-subtitle">Full-Stack Web Developer based in Algiers, Algeria.</p>
-      </div>
     </div>
 
-    <div class="start-menu-grid">
-      <a class="start-contact-card" href="https://wa.me/213555997021" target="_blank" rel="noreferrer noopener" aria-label="Open WhatsApp chat">
-        <span class="start-contact-kind">WhatsApp</span>
-        <span class="start-contact-value">+213 555 997 021</span>
-        <span class="start-contact-action">Open a direct chat for project discussions.</span>
-      </a>
 
-      <a class="start-contact-card" href="mailto:difwalid18@gmail.com" aria-label="Send an email">
-        <span class="start-contact-kind">Email</span>
-        <span class="start-contact-value">difwalid18@gmail.com</span>
-        <span class="start-contact-action">Send a message for work, freelance, or collaboration.</span>
-      </a>
 
-      <a class="start-contact-card wide" href="https://www.linkedin.com/in/dif-walid-560a96294/" target="_blank" rel="noreferrer noopener" aria-label="Open LinkedIn profile">
-        <span class="start-contact-kind">LinkedIn</span>
-        <span class="start-contact-value">dif-walid-560a96294</span>
-        <span class="start-contact-action">View my profile, background, and professional experience.</span>
-      </a>
-    </div>
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================= -->
 
-    <p class="start-menu-footnote">Fastest reply is usually on WhatsApp or email.</p>
-  </section>
+    <script>
 
-  <div class="taskbar" aria-label="Taskbar">
-    <div class="taskbar-left">
-      <button class="taskbar-button" id="start-menu-button" type="button" aria-label="Start" aria-controls="start-menu" aria-expanded="false">
-        <div class="start-logo" aria-hidden="true">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </button>
-      <div class="taskbar-search">Type here to search</div>
-      <div class="taskbar-divider" aria-hidden="true"></div>
-      <button class="taskbar-button taskbar-document" type="button" data-taskbar-button data-file="cv.txt" data-title="cv.txt - Notepad" aria-label="Open cv.txt">CV</button>
-      <button class="taskbar-button taskbar-document" type="button" data-taskbar-button data-file="projects.txt" data-title="projects.txt - Notepad" aria-label="Open projects.txt">PROJECTS</button>
-      <button class="taskbar-button taskbar-document" type="button" data-video-button data-video-label="chevron.mp4" data-video-src="videos/end(1).mp4" data-video-title="chevron.mp4 - Media Player" aria-label="Open chevron.mp4">CHEVRON</button>
-      <button class="taskbar-button taskbar-document" type="button" data-video-button data-video-label="ihm-final (1).mp4" data-video-src="videos/ihm-final (1).mp4" data-video-title="ihm-final (1).mp4 - Media Player" data-video-note="Guide: at 1:00 in this video, the first website shown is the older version of the site I created." aria-label="Open ihm-final (1).mp4">IHM FINAL</button>
-    </div>
 
-    <div class="taskbar-right">
-      <div class="tray">
-        <div class="tray-item">^</div>
-        <div class="tray-item">WiFi</div>
-        <div class="tray-item">VOL</div>
-        <div class="tray-item language">ENG</div>
-      </div>
-      <div class="clock">
-        <span class="clock-time" id="clock-time">12:00 PM</span>
-        <span class="clock-date" id="clock-date">04/04/2026</span>
-      </div>
-    </div>
-  </div>
+        /* =====================================================
+           ENTER WEBSITE
+        ===================================================== */
 
-  <script>
-    const documentButtons = Array.from(document.querySelectorAll("[data-document-button]"));
-    const taskbarDocumentButtons = Array.from(document.querySelectorAll("[data-taskbar-button]"));
-    const videoButtons = Array.from(document.querySelectorAll("[data-video-button]"));
-    const startMenuLinks = Array.from(document.querySelectorAll(".start-menu a"));
-    const modal = document.getElementById("document-modal");
-    const videoModal = document.getElementById("video-modal");
-    const startMenu = document.getElementById("start-menu");
-    const startMenuButton = document.getElementById("start-menu-button");
-    const closeModalButton = document.getElementById("close-modal");
-    const minimizeModalButton = document.getElementById("minimize-modal");
-    const maximizeModalButton = document.getElementById("maximize-modal");
-    const closeVideoModalButton = document.getElementById("close-video-modal");
-    const minimizeVideoModalButton = document.getElementById("minimize-video-modal");
-    const maximizeVideoModalButton = document.getElementById("maximize-video-modal");
-    const documentContent = document.getElementById("document-content");
-    const notepadWindow = document.querySelector(".notepad-window");
-    const mediaWindow = document.querySelector(".media-window");
-    const videoPlayer = document.getElementById("video-player");
-    const windowTitle = document.getElementById("window-title");
-    const videoWindowTitle = document.getElementById("video-window-title");
-    const videoToolbarPath = document.getElementById("video-toolbar-path");
-    const videoNote = document.getElementById("video-note");
-    const videoStatusFile = document.getElementById("video-status-file");
-    const videoStatusPath = document.getElementById("video-status-path");
-    const statusFile = document.getElementById("status-file");
-    const timeElement = document.getElementById("clock-time");
-    const dateElement = document.getElementById("clock-date");
-    const documentCache = new Map();
-    let currentDocument = "";
-    let currentVideoSource = "";
-    let lastTriggerButton = null;
-    const fallbackCv = `CURRICULUM VITAE
-================
+        function enterWebsite() {
 
-PERSONAL INFORMATION
---------------------
-Name     : Dif Walid
-Location : Algiers, Algeria
-Phone    : +213 555 997 021
-Email    : difwalid18@gmail.com
+            const landing =
+                document.getElementById("landing");
 
-PROFESSIONAL SUMMARY
---------------------
-Passionate and results-driven Web Developer with over 2 years of
-experience building modern, scalable, and high-performance web
-applications. Specialized in full-stack development using React,
-Laravel, and Node.js. Strong problem-solving skills with a focus on
-clean code, performance, and user experience.
+            const home =
+                document.getElementById("home");
 
-WORK EXPERIENCE
----------------
-Full-Stack Web Developer
-Freelance / Projects | 2+ Years
 
-- Developed dynamic and responsive web applications using React and
-  modern JavaScript
-- Built robust backend systems with Node.js and Laravel
-- Designed and managed databases (MySQL) for scalable applications
-- Created REST APIs and integrated third-party services
-- Improved performance and user experience across multiple projects
-- Worked on real-world applications including tracking systems and
-  management platforms
+            /*
+             * Start homepage animation
+             */
 
-TECHNICAL SKILLS
-----------------
-Frontend
-- React.js
-- HTML5, CSS3, JavaScript (ES6+)
+            home.classList.add("show");
 
-Backend
-- Node.js
-- Laravel (PHP)
 
-Database
-- MySQL
+            /*
+             * Fade Spline away
+             */
 
-Other Skills
-- REST API Development
-- Git & Version Control
-- Debugging & Optimization
-- Responsive Design
+            landing.classList.add("hide");
 
-PROJECTS
---------
-- GPS Car Tracking System (location & speed monitoring in real-time)
-- Dormitory Management Web Application
-- Online Ordering System with dynamic cart and database integration
-- Argoub Promotion Website (real estate promotion company)
-  http://argoubpromotion.fr/
 
-EDUCATION
----------
-SBL School
-- English Level: C2
+            /*
+             * Enable scrolling
+             */
 
-LANGUAGES
----------
-- Arabic  : Native
-- English : Fluent (C2)
-- French  : Intermediate
+            setTimeout(() => {
 
-ADDITIONAL INFORMATION
-----------------------
-- Fast learner and adaptable to new technologies
-- Strong analytical and problem-solving skills
-- Ability to work independently and meet deadlines`;
-    const fallbackProjects = `PROJECTS
-========
+                document.body.style.overflow = "hidden";
 
-1. GPS CAR TRACKING SYSTEM
---------------------------
-Type  : Real-time vehicle monitoring platform
-Stack : React.js, Node.js / Laravel, MySQL, REST APIs
+            }, 100);
 
-Overview
-- Built a web platform to monitor vehicle location, movement, and speed
-  in real time.
-- Focused on responsive dashboards, clean data presentation, and reliable
-  backend communication.
 
-Key Features
-- Live GPS position updates
-- Speed and trip activity monitoring
-- Driver / vehicle status tracking
-- Clear interface for operational follow-up
+            /*
+             * Scroll homepage to top
+             */
 
-Impact
-- Helped turn raw tracking data into a practical monitoring tool for
-  day-to-day use.
+            home.scrollTo({
+                top: 0,
+                behavior: "instant"
+            });
 
-2. DORMITORY MANAGEMENT WEB APPLICATION
----------------------------------------
-Type  : Administrative management system
-Stack : React.js, Laravel, MySQL
-
-Overview
-- Developed a web application to simplify dormitory operations and centralize
-  resident management.
-- Designed the system to reduce manual work and improve visibility for staff.
-
-Key Features
-- Resident registration and profile management
-- Room allocation and occupancy tracking
-- Administrative dashboards and reporting views
-- Structured data management for daily operations
-
-Impact
-- Improved organization and made dormitory information easier to manage.
-
-3. ONLINE ORDERING SYSTEM
--------------------------
-Type  : Ordering and cart management platform
-Stack : React.js, Node.js / Laravel, MySQL
-
-Overview
-- Created an ordering experience with a dynamic cart and database-backed
-  product flow.
-- Focused on usability, speed, and a smooth customer journey.
-
-Key Features
-- Dynamic shopping cart interactions
-- Product and order data persistence
-- Responsive frontend experience
-- Backend integration for order handling
-
-Impact
-- Delivered a practical foundation for digital ordering and transaction flow.
-
-4. ARGOUB PROMOTION WEBSITE
----------------------------
-Type    : Real estate promotion company website
-Website : http://argoubpromotion.fr/
-
-Overview
-- Built a public-facing website for Argoub Promotion to present the company
-  online and showcase its real estate activity.
-- Structured the content to make projects, company information, and contact
-  details easy to browse.
-
-Key Features
-- Corporate presentation pages
-- Real estate project showcase
-- Contact and appointment information
-- Responsive marketing website experience
-
-Impact
-- Gave the client a stronger online presence through a dedicated website.
-
-NOTES
------
-- All projects were built with an emphasis on clean UI, responsive layouts,
-  and scalable backend structure.
-- Comfortable adapting these systems to client needs and adding new features
-  over time.`;
-
-    const fallbackDocuments = {
-      "cv.txt": fallbackCv,
-      "projects.txt": fallbackProjects
-    };
-
-    async function loadDocument(fileName) {
-      if (documentCache.has(fileName)) {
-        return documentCache.get(fileName);
-      }
-
-      let documentText = fallbackDocuments[fileName] || "";
-
-      if (window.location.protocol !== "file:") {
-        try {
-          const response = await fetch(fileName, { cache: "no-store" });
-          if (!response.ok) {
-            throw new Error("Could not load " + fileName);
-          }
-          documentText = await response.text();
-        } catch (error) {
-          documentText = fallbackDocuments[fileName] || "";
-        }
-      }
-
-      documentCache.set(fileName, documentText);
-      return documentText;
-    }
-
-    function syncDocumentState() {
-      const isOpen = modal.classList.contains("is-open");
-
-      documentButtons.forEach(function (button) {
-        const isCurrent = isOpen && button.dataset.file === currentDocument;
-        button.classList.toggle("is-active", isCurrent);
-        button.setAttribute("aria-expanded", String(isCurrent));
-      });
-
-      taskbarDocumentButtons.forEach(function (button) {
-        const isCurrent = isOpen && button.dataset.file === currentDocument;
-        button.classList.toggle("active", isCurrent);
-      });
-
-      statusFile.textContent = isOpen && currentDocument ? currentDocument : "No file open";
-    }
-
-    function syncVideoState() {
-      const isOpen = videoModal.classList.contains("is-open");
-      videoButtons.forEach(function (button) {
-        const isCurrent = isOpen && button.dataset.videoSrc === currentVideoSource;
-        if (button.classList.contains("desktop-file")) {
-          button.classList.toggle("is-active", isCurrent);
-          button.setAttribute("aria-expanded", String(isCurrent));
-        } else {
-          button.classList.toggle("active", isCurrent);
-        }
-      });
-    }
-
-    function syncStartMenuState() {
-      const isOpen = startMenu.classList.contains("is-open");
-      startMenuButton.classList.toggle("active", isOpen);
-      startMenuButton.setAttribute("aria-expanded", String(isOpen));
-      startMenu.setAttribute("aria-hidden", String(!isOpen));
-    }
-
-    function openStartMenu() {
-      startMenu.classList.add("is-open");
-      syncStartMenuState();
-    }
-
-    function closeStartMenu() {
-      startMenu.classList.remove("is-open");
-      syncStartMenuState();
-    }
-
-    function toggleStartMenu() {
-      if (startMenu.classList.contains("is-open")) {
-        closeStartMenu();
-      } else {
-        openStartMenu();
-      }
-    }
-
-    function openModal() {
-      closeStartMenu();
-      modal.classList.add("is-open");
-      modal.setAttribute("aria-hidden", "false");
-      syncDocumentState();
-      documentContent.focus();
-    }
-
-    function closeModal() {
-      modal.classList.remove("is-open");
-      modal.setAttribute("aria-hidden", "true");
-      syncDocumentState();
-      if (lastTriggerButton) {
-        lastTriggerButton.focus();
-      }
-    }
-
-    function toggleMaximize() {
-      notepadWindow.classList.toggle("is-maximized");
-    }
-
-    function openVideoModal(videoLabel, videoSource, videoTitle, videoDescription) {
-      if (modal.classList.contains("is-open")) {
-        closeModal();
-      }
-      closeStartMenu();
-      currentVideoSource = videoSource;
-      videoWindowTitle.textContent = videoTitle || videoLabel + " - Media Player";
-      videoToolbarPath.textContent = videoSource;
-      videoStatusFile.textContent = videoLabel;
-      videoStatusPath.textContent = videoSource;
-      if (videoDescription) {
-        videoNote.textContent = videoDescription;
-        videoNote.classList.remove("is-hidden");
-      } else {
-        videoNote.textContent = "";
-        videoNote.classList.add("is-hidden");
-      }
-      videoModal.classList.add("is-open");
-      videoModal.setAttribute("aria-hidden", "false");
-      syncVideoState();
-      videoPlayer.pause();
-      if (videoPlayer.getAttribute("src") !== videoSource) {
-        videoPlayer.src = videoSource;
-        videoPlayer.load();
-      }
-      videoPlayer.currentTime = 0;
-      videoPlayer.play().catch(function () {
-        return undefined;
-      });
-      videoPlayer.focus();
-    }
-
-    function closeVideoModal() {
-      videoModal.classList.remove("is-open");
-      videoModal.setAttribute("aria-hidden", "true");
-      videoPlayer.pause();
-      syncVideoState();
-      if (lastTriggerButton) {
-        lastTriggerButton.focus();
-      }
-    }
-
-    function toggleVideoMaximize() {
-      mediaWindow.classList.toggle("is-maximized");
-    }
-
-    function renderDocumentText(text) {
-      const fragment = document.createDocumentFragment();
-      const normalizedText = text.replace(/\r\n/g, "\n");
-      const urlPattern = /(https?:\/\/[^\s]+|(?:www\.)?[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+(?:\/[^\s]*)?)/gi;
-      let lastIndex = 0;
-      let match;
-
-      while ((match = urlPattern.exec(normalizedText)) !== null) {
-        const matchStart = match.index;
-        const url = match[0];
-
-        if (matchStart > lastIndex) {
-          fragment.appendChild(
-            document.createTextNode(normalizedText.slice(lastIndex, matchStart))
-          );
         }
 
-        const link = document.createElement("a");
-        link.href = /^https?:\/\//i.test(url) ? url : "https://" + url;
-        link.textContent = url;
-        link.target = "_blank";
-        link.rel = "noreferrer noopener";
-        fragment.appendChild(link);
 
-        lastIndex = matchStart + url.length;
-      }
 
-      if (lastIndex < normalizedText.length) {
-        fragment.appendChild(
-          document.createTextNode(normalizedText.slice(lastIndex))
+        /* =====================================================
+           VIDEO CARDS
+        ===================================================== */
+
+        const videoCards =
+            document.querySelectorAll(".video-card");
+
+        const modal =
+            document.getElementById("videoModal");
+
+        const modalVideo =
+            document.getElementById("modalVideo");
+
+        const modalClose =
+            document.getElementById("modalClose");
+
+
+
+        videoCards.forEach((card) => {
+
+            const video =
+                card.querySelector("video");
+
+
+            /*
+             * Play preview on hover
+             */
+
+            card.addEventListener(
+                "mouseenter",
+                () => {
+
+                    video
+                        .play()
+                        .catch(() => {});
+
+                }
+            );
+
+
+            /*
+             * Stop preview
+             */
+
+            card.addEventListener(
+                "mouseleave",
+                () => {
+
+                    video.pause();
+
+                    video.currentTime = 0;
+
+                }
+            );
+
+
+            /*
+             * Open modal
+             */
+
+            card.addEventListener(
+                "click",
+                () => {
+
+                    const source =
+                        card.dataset.src;
+
+                    modalVideo.src = source;
+
+                    modal.classList.add("open");
+
+                    document.body.style.overflow =
+                        "hidden";
+
+                    modalVideo
+                        .play()
+                        .catch(() => {});
+
+                }
+            );
+
+        });
+
+
+
+        /* =====================================================
+           CLOSE MODAL
+        ===================================================== */
+
+        function closeModal() {
+
+            modal.classList.remove("open");
+
+            modalVideo.pause();
+
+            modalVideo.src = "";
+
+            document.body.style.overflow =
+                "auto";
+
+        }
+
+
+        modalClose.addEventListener(
+            "click",
+            closeModal
         );
-      }
 
-      documentContent.replaceChildren(fragment);
-      documentContent.scrollTop = 0;
-    }
 
-    async function openDocument(fileName, title) {
-      if (videoModal.classList.contains("is-open")) {
-        closeVideoModal();
-      }
-      currentDocument = fileName;
-      windowTitle.textContent = title || fileName + " - Notepad";
-      renderDocumentText(await loadDocument(fileName));
-      openModal();
-    }
+        modal.addEventListener(
+            "click",
+            (event) => {
 
-    function handleDocumentLaunch(event) {
-      lastTriggerButton = event.currentTarget;
-      openDocument(event.currentTarget.dataset.file, event.currentTarget.dataset.title);
-    }
+                if (
+                    event.target === modal
+                ) {
 
-    function handleVideoLaunch(event) {
-      lastTriggerButton = event.currentTarget;
-      openVideoModal(
-        event.currentTarget.dataset.videoLabel,
-        event.currentTarget.dataset.videoSrc,
-        event.currentTarget.dataset.videoTitle,
-        event.currentTarget.dataset.videoNote
-      );
-    }
+                    closeModal();
 
-    function updateClock() {
-      const now = new Date();
-      timeElement.textContent = now.toLocaleTimeString([], {
-        hour: "numeric",
-        minute: "2-digit"
-      });
-      dateElement.textContent = now.toLocaleDateString([], {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric"
-      });
-    }
+                }
 
-    documentButtons.forEach(function (button) {
-      button.addEventListener("click", handleDocumentLaunch);
-    });
-    videoButtons.forEach(function (button) {
-      button.addEventListener("click", handleVideoLaunch);
-    });
-    startMenuButton.addEventListener("click", function () {
-      toggleStartMenu();
-    });
-    startMenuLinks.forEach(function (link) {
-      link.addEventListener("click", function () {
-        closeStartMenu();
-      });
-    });
+            }
+        );
 
-    closeModalButton.addEventListener("click", closeModal);
-    minimizeModalButton.addEventListener("click", closeModal);
-    maximizeModalButton.addEventListener("click", toggleMaximize);
-    closeVideoModalButton.addEventListener("click", closeVideoModal);
-    minimizeVideoModalButton.addEventListener("click", closeVideoModal);
-    maximizeVideoModalButton.addEventListener("click", toggleVideoMaximize);
 
-    taskbarDocumentButtons.forEach(function (button) {
-      button.addEventListener("click", handleDocumentLaunch);
-    });
+        const infoModal = document.getElementById("infoModal");
+        const infoModalClose = document.getElementById("infoModalClose");
+        const infoTitle = document.getElementById("infoTitle");
+        const infoDate = document.getElementById("infoDate");
+        const infoType = document.getElementById("infoType");
+        const infoDescription = document.getElementById("infoDescription");
 
-    modal.addEventListener("click", function (event) {
-      if (event.target === modal) {
-        closeModal();
-      }
-    });
+        document.querySelectorAll(".project-action").forEach((button) => {
+            button.addEventListener("click", (event) => {
+                event.stopPropagation();
 
-    videoModal.addEventListener("click", function (event) {
-      if (event.target === videoModal) {
-        closeVideoModal();
-      }
-    });
+                const card = button.closest(".project-card");
+                const title = card.dataset.title;
+                const date = card.dataset.date;
+                const type = card.dataset.type === "video" ? "Web Project" : "Design Project";
+                const description = card.dataset.description;
 
-    document.addEventListener("click", function (event) {
-      if (
-        startMenu.classList.contains("is-open") &&
-        event.target !== startMenuButton &&
-        !startMenuButton.contains(event.target) &&
-        !startMenu.contains(event.target)
-      ) {
-        closeStartMenu();
-      }
-    });
+                infoTitle.textContent = title;
+                infoDate.textContent = date;
+                infoType.textContent = type;
+                infoDescription.textContent = description;
 
-    document.addEventListener("keydown", function (event) {
-      if (event.key === "Escape" && videoModal.classList.contains("is-open")) {
-        closeVideoModal();
-      } else if (event.key === "Escape" && modal.classList.contains("is-open")) {
-        closeModal();
-      } else if (event.key === "Escape" && startMenu.classList.contains("is-open")) {
-        closeStartMenu();
-      }
-    });
+                infoModal.classList.add("open");
+                document.body.style.overflow = "hidden";
+            });
+        });
 
-    syncStartMenuState();
-    updateClock();
-    setInterval(updateClock, 30000);
-  </script>
+        function closeInfoModal() {
+            infoModal.classList.remove("open");
+            document.body.style.overflow = "auto";
+        }
+
+        infoModalClose.addEventListener("click", closeInfoModal);
+
+        infoModal.addEventListener("click", (event) => {
+            if (event.target === infoModal) {
+                closeInfoModal();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && infoModal.classList.contains("open")) {
+                closeInfoModal();
+            }
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && modal.classList.contains("open")) {
+                closeModal();
+            }
+        });
+
+
+
+        /* =====================================================
+           HEADER SHRINK
+        ===================================================== */
+
+        const header =
+            document.querySelector(".header");
+
+
+        const home =
+            document.getElementById("home");
+
+
+        home.addEventListener(
+            "scroll",
+            () => {
+
+                if (home.scrollTop > 40) {
+
+                    header.classList.add("shrink");
+
+                } else {
+
+                    header.classList.remove("shrink");
+
+                }
+
+            }
+        );
+
+
+    </script>
+
 </body>
 </html>

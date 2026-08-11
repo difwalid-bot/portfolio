@@ -1456,8 +1456,83 @@
 
 
         /* =========================================================
-           MOBILE
+           TABLET + MOBILE
         ========================================================= */
+
+        @media (max-width: 1024px) {
+
+            .landing-brand {
+                top: 6%;
+            }
+
+            .landing-brand-name {
+                font-size: clamp(20px, 3vw, 28px);
+                letter-spacing: 7px;
+            }
+
+            .enter-button {
+                min-width: 170px;
+                padding: 14px 32px;
+            }
+
+            .header {
+                min-height: 100px;
+                padding: 18px 20px;
+            }
+
+            .logo {
+                width: min(280px, 60vw);
+            }
+
+            .header.shrink .logo {
+                width: 170px;
+            }
+
+            .hero {
+                min-height: calc(100vh - 100px);
+                padding: 60px 20px 90px;
+            }
+
+            .hero h1 {
+                font-size: clamp(36px, 7vw, 66px);
+            }
+
+            .hero-description {
+                font-size: 15px;
+                line-height: 1.8;
+                max-width: 95%;
+            }
+
+            .hero-stats {
+                gap: 32px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .cards-section {
+                padding: 70px 20px 110px;
+            }
+
+            .section-header {
+                margin-bottom: 34px;
+            }
+
+            .cards-grid {
+                gap: 20px;
+            }
+
+            .project-card {
+                min-height: 280px;
+            }
+
+            .project-card-content {
+                padding: 18px 18px 22px;
+            }
+
+            .project-action {
+                padding: 10px 14px;
+            }
+        }
 
         @media (max-width: 700px) {
 
@@ -1473,35 +1548,36 @@
             .enter-button {
                 min-width: 165px;
                 padding: 14px 25px;
+                width: auto;
             }
 
             .header {
-                min-height: 120px;
+                min-height: 100px;
+                padding: 16px 18px;
             }
 
             .logo {
-                width: min(250px, 68vw);
+                width: min(240px, 68vw);
             }
 
             .header.shrink .logo {
-                width: 130px;
+                width: 140px;
             }
 
             .hero {
-                min-height: calc(100vh - 120px);
-
-                padding:
-                    60px 20px
-                    100px;
+                min-height: calc(100vh - 100px);
+                padding: 55px 18px 90px;
             }
 
             .hero h1 {
+                font-size: clamp(28px, 9vw, 42px);
                 letter-spacing: -1.5px;
             }
 
             .hero-description {
                 font-size: 14px;
                 line-height: 1.8;
+                max-width: 100%;
             }
 
             .hero-stats {
@@ -1509,21 +1585,116 @@
             }
 
             .cards-section {
-                padding:
-                    60px 18px
-                    100px;
+                padding: 60px 16px 100px;
             }
 
             .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
                 margin-bottom: 30px;
             }
 
-            .video-card {
-                min-height: 250px;
+            .cards-grid {
+                gap: 18px;
             }
 
-            .video-card video {
+            .project-card {
                 min-height: 250px;
+                border-radius: 16px;
+            }
+
+            .project-card video,
+            .project-card img {
+                min-height: 220px;
+            }
+
+            .project-card-content {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 18px;
+            }
+
+            .project-action {
+                width: 100%;
+                text-align: center;
+                padding: 12px 0;
+            }
+
+            .project-name {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 520px) {
+
+            .landing-brand {
+                top: 6%;
+            }
+
+            .landing-brand-small {
+                font-size: 9px;
+                letter-spacing: 5px;
+            }
+
+            .landing-brand-name {
+                font-size: 16px;
+                letter-spacing: 5px;
+            }
+
+            .enter-button {
+                width: calc(100vw - 48px);
+                min-width: auto;
+                padding: 14px 20px;
+            }
+
+            .header {
+                padding: 14px 16px;
+            }
+
+            .hero {
+                padding: 50px 16px 80px;
+            }
+
+            .cards-section {
+                padding: 50px 14px 80px;
+            }
+
+            .section-kicker {
+                font-size: 8px;
+                gap: 8px;
+            }
+
+            .cards-heading {
+                font-size: clamp(26px, 8vw, 34px);
+            }
+
+            .project-category h3 {
+                font-size: 0.75rem;
+                letter-spacing: 0.24em;
+            }
+
+            .project-card {
+                min-height: 240px;
+            }
+
+            .info-modal-content {
+                padding: 24px;
+            }
+
+            .info-modal-content h3 {
+                font-size: 1.7rem;
+            }
+
+            .info-meta {
+                gap: 12px;
+            }
+
+            .modal-close,
+            .info-modal-close {
+                width: 38px;
+                height: 38px;
             }
         }
 
@@ -1639,7 +1810,8 @@
             <div class="gold-line"></div>
 
             <p class="hero-description">
-                RTPHM-DEV, créée en 2024, place l'innovation et la créativité au cœur du développement numérique. Nous sommes une équipe passionnée de développeurs, designers et ingénieurs qui conçoivent des solutions digitales percutantes et des sites web de luxe, pensés pour présenter votre marque et affirmer sa place sur le marché. Notre mission : transformer chaque idée en expérience numérique d'exception, portée par les technologies et méthodologies les plus avancées.
+               
+              créée en 2024, place l'innovation et la créativité au cœur du développement numérique. Nous sommes une équipe passionnée de développeurs, designers et ingénieurs qui conçoivent des solutions digitales percutantes et des sites web de luxe, pensés pour présenter votre marque et affirmer sa place sur le marché. Notre mission : transformer chaque idée en expérience numérique d'exception, portée par les technologies et méthodologies les plus avancées.
             </p>
 
             <div class="hero-stats">

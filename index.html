@@ -29,30 +29,40 @@
         }
 
         :root {
-            --black: #030303;
-            --black-soft: #0a0a0a;
-            --gold: #d4af37;
-            --gold-light: #f4d77a;
-            --gold-dark: #8c6a16;
-            --white: #f4f4f0;
-            --muted: rgba(255, 255, 255, 0.62);
-            --border: rgba(212, 175, 55, 0.16);
+            --bg: #f6f1e8;
+            --bg-strong: #eae0d0;
+            --panel: rgba(255, 255, 255, 0.7);
+            --panel-strong: rgba(255, 255, 255, 0.88);
+            --ink: #171613;
+            --ink-soft: #3a352f;
+            --muted: rgba(23, 22, 19, 0.68);
+            --line: rgba(23, 22, 19, 0.12);
+            --line-strong: rgba(23, 22, 19, 0.18);
+            --gold: #b58d4a;
+            --gold-soft: #d6b57a;
+            --gold-deep: #8e6b2a;
+            --white: #f8f5f0;
+            --shadow: rgba(17, 15, 12, 0.12);
             --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
             --font-body: "Jost", Arial, Helvetica, sans-serif;
         }
 
         html {
             scroll-behavior: smooth;
-            background: var(--black);
+            background: var(--bg);
         }
 
         body {
             width: 100%;
             height: 100%;
-            background: var(--black);
-            color: var(--white);
+            background:
+                radial-gradient(circle at top, rgba(181, 141, 74, 0.12), transparent 30%),
+                var(--bg);
+            color: var(--ink);
             font-family: var(--font-body);
             overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
 
         button,
@@ -381,25 +391,17 @@
             overflow-x: hidden;
 
             background:
-                radial-gradient(
-                    circle at 50% 0%,
-                    rgba(212, 175, 55, 0.10),
-                    transparent 30%
-                ),
-                radial-gradient(
-                    circle at 10% 50%,
-                    rgba(212, 175, 55, 0.025),
-                    transparent 25%
-                ),
-                #030303;
+                radial-gradient(circle at top, rgba(181, 141, 74, 0.12), transparent 28%),
+                linear-gradient(180deg, rgba(255,255,255,0.28), rgba(255,255,255,0) 22%),
+                var(--bg);
 
             opacity: 0;
 
-            transform: scale(1.025);
+            transform: scale(1.01);
 
             transition:
-                opacity 1.5s cubic-bezier(.16, 1, .3, 1),
-                transform 1.8s cubic-bezier(.16, 1, .3, 1);
+                opacity 1.2s cubic-bezier(.16, 1, .3, 1),
+                transform 1.4s cubic-bezier(.16, 1, .3, 1);
         }
 
         #home.show {
@@ -408,7 +410,7 @@
         }
 
 
-        /* Futuristic grid */
+        /* Refined grid */
 
         #home::before {
             content: "";
@@ -419,54 +421,37 @@
             pointer-events: none;
 
             background-image:
-                linear-gradient(
-                    rgba(212, 175, 55, 0.035) 1px,
-                    transparent 1px
-                ),
-                linear-gradient(
-                    90deg,
-                    rgba(212, 175, 55, 0.035) 1px,
-                    transparent 1px
-                );
+                linear-gradient(rgba(17, 15, 12, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(17, 15, 12, 0.03) 1px, transparent 1px);
 
-            background-size: 80px 80px;
+            background-size: 72px 72px;
 
-            mask-image:
-                radial-gradient(
-                    ellipse at center,
-                    black 0%,
-                    transparent 75%
-                );
+            mask-image: radial-gradient(ellipse at center, black 0%, transparent 78%);
 
             z-index: 0;
         }
 
 
-        /* Moving light */
+        /* Soft ambient glow */
 
         #home::after {
             content: "";
 
             position: fixed;
 
-            width: 600px;
-            height: 600px;
+            width: 620px;
+            height: 620px;
 
-            top: -300px;
+            top: -260px;
             left: 50%;
 
             transform: translateX(-50%);
 
-            background:
-                radial-gradient(
-                    circle,
-                    rgba(212, 175, 55, 0.07),
-                    transparent 70%
-                );
+            background: radial-gradient(circle, rgba(181, 141, 74, 0.14), transparent 68%);
 
             pointer-events: none;
 
-            animation: ambientGlow 8s ease-in-out infinite alternate;
+            animation: ambientGlow 12s ease-in-out infinite alternate;
 
             z-index: 0;
         }
@@ -491,17 +476,11 @@
 
             padding: 25px 20px;
 
-            background:
-                linear-gradient(
-                    to bottom,
-                    rgba(3, 3, 3, 0.96),
-                    rgba(3, 3, 3, 0.72),
-                    transparent
-                );
+            background: linear-gradient(180deg, rgba(246, 241, 232, 0.9), rgba(246, 241, 232, 0.72), rgba(246, 241, 232, 0));
 
             backdrop-filter: blur(18px);
 
-            border-bottom: 1px solid rgba(212, 175, 55, 0.08);
+            border-bottom: 1px solid rgba(23, 22, 19, 0.08);
 
             z-index: 10;
 
@@ -509,6 +488,63 @@
                 min-height 0.5s ease,
                 padding 0.5s ease,
                 background 0.5s ease;
+        }
+
+        .site-nav {
+            position: absolute;
+            left: 30px;
+            right: 30px;
+            top: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 14px;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.64);
+            transform: translateY(-50%);
+            pointer-events: none;
+            box-shadow: 0 14px 26px rgba(17, 15, 12, 0.06);
+            border-radius: 999px;
+        }
+
+        .site-nav-group {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            pointer-events: auto;
+        }
+
+        .site-nav a {
+            color: rgba(23, 22, 19, 0.72);
+            font-size: 10px;
+            letter-spacing: 0.18em;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: color 0.25s ease, transform 0.25s ease;
+        }
+
+        .site-nav a:hover {
+            color: var(--gold-deep);
+            transform: translateY(-1px);
+        }
+
+        .site-nav a::after {
+            content: "";
+            display: block;
+            width: 0;
+            height: 1px;
+            margin-top: 5px;
+            background: var(--gold);
+            transition: width 0.25s ease;
+        }
+
+        .site-nav a:hover::after,
+        .site-nav .nav-contact::after {
+            width: 100%;
+        }
+
+        .site-nav .nav-contact {
+            color: var(--gold-deep);
         }
 
         .header::before {
@@ -666,11 +702,11 @@
 
             font-size: 9px;
 
-            letter-spacing: 5px;
+            letter-spacing: 0.22em;
 
             text-transform: uppercase;
 
-            color: rgba(212, 175, 55, 0.75);
+            color: var(--gold-deep);
 
             opacity: 0;
 
@@ -690,42 +726,28 @@
             width: 35px;
             height: 1px;
 
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    var(--gold)
-                );
+            background: linear-gradient(90deg, transparent, rgba(181, 141, 74, 0.7));
         }
 
         .hero-eyebrow::after {
-            background:
-                linear-gradient(
-                    90deg,
-                    var(--gold),
-                    transparent
-                );
+            background: linear-gradient(90deg, rgba(181, 141, 74, 0.7), transparent);
         }
 
 
         .hero h1 {
-            max-width: 1000px;
+            max-width: 980px;
 
             font-family: var(--font-display);
 
-            font-size: clamp(
-                46px,
-                7vw,
-                90px
-            );
+            font-size: clamp(44px, 7vw, 88px);
 
             font-weight: 500;
 
-            line-height: 0.98;
+            line-height: 0.96;
 
-            letter-spacing: -2px;
+            letter-spacing: -0.05em;
 
-            color: #f5f2ec;
+            color: var(--ink);
 
             opacity: 0;
 
@@ -740,7 +762,7 @@
 
         .hero h1 em {
             font-style: italic;
-            color: var(--gold-light);
+            color: var(--gold-deep);
         }
 
 
@@ -801,16 +823,16 @@
         /* Description */
 
         .hero-description {
-            max-width: 680px;
+            max-width: 700px;
 
             color: var(--muted);
 
-            font-size: 16px;
-            font-weight: 300;
+            font-size: 17px;
+            font-weight: 400;
 
-            line-height: 1.9;
+            line-height: 1.8;
 
-            letter-spacing: 0.3px;
+            letter-spacing: 0.01em;
 
             opacity: 0;
 
@@ -823,6 +845,237 @@
             animation-delay: 1.6s;
         }
 
+        .hero-kicker {
+            max-width: 650px;
+            margin-top: 18px;
+            color: rgba(23, 22, 19, 0.5);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .featured-section {
+            position: relative;
+            width: min(1250px, 100%);
+            margin: 0 auto;
+            padding: 30px 25px 115px;
+            z-index: 2;
+        }
+
+        .featured-project {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+            min-height: 390px;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 24px 60px rgba(17, 15, 12, 0.08);
+        }
+
+        .featured-media {
+            position: relative;
+            min-height: 390px;
+            overflow: hidden;
+        }
+
+        .featured-media video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.8) contrast(1.06);
+            transition: transform 0.7s ease, filter 0.7s ease;
+        }
+
+        .featured-project:hover .featured-media video {
+            transform: scale(1.04);
+            filter: saturate(1) contrast(1.08);
+        }
+
+        .featured-media::after {
+            content: "FEATURED CASE STUDY";
+            position: absolute;
+            top: 22px;
+            left: 22px;
+            color: var(--gold-light);
+            font-size: 9px;
+            letter-spacing: 0.22em;
+        }
+
+        .featured-copy {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 42px;
+            background: linear-gradient(135deg, rgba(181, 141, 74, 0.1), rgba(255,255,255,0.4));
+        }
+
+        .featured-label {
+            margin-bottom: 15px;
+            color: var(--gold-deep);
+            font-size: 9px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+        }
+
+        .featured-copy h2 {
+            max-width: 420px;
+            margin-bottom: 18px;
+            font-family: var(--font-display);
+            font-size: clamp(32px, 4vw, 56px);
+            font-weight: 500;
+            line-height: 1;
+            color: var(--ink);
+        }
+
+        .featured-copy p {
+            max-width: 430px;
+            color: rgba(23,22,19,0.7);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .featured-link {
+            align-self: flex-start;
+            margin-top: 28px;
+            padding-bottom: 9px;
+            border-bottom: 1px solid var(--gold);
+            color: var(--gold-light);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+
+        .services-section {
+            position: relative;
+            width: min(1250px, 100%);
+            margin: 0 auto;
+            padding: 0 25px 125px;
+            z-index: 2;
+        }
+
+        .services-intro {
+            display: flex;
+            justify-content: space-between;
+            align-items: end;
+            gap: 30px;
+            margin-bottom: 35px;
+        }
+
+        .services-intro h2 {
+            max-width: 560px;
+            font-family: var(--font-display);
+            font-size: clamp(30px, 4vw, 50px);
+            font-weight: 500;
+            line-height: 1.05;
+            color: var(--ink);
+        }
+
+        .services-intro p {
+            max-width: 340px;
+            color: rgba(23,22,19,0.64);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1px;
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+            background: var(--line);
+        }
+
+        .service-item {
+            min-height: 210px;
+            padding: 28px 24px;
+            background: rgba(255,255,255,0.46);
+            border-right: 1px solid var(--line);
+        }
+
+        .service-item:nth-child(3) {
+            border-right: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .service-item:last-child {
+            border-right: 0;
+        }
+
+        .service-number {
+            color: var(--gold);
+            font-family: var(--font-display);
+            font-size: 22px;
+        }
+
+        .service-item h3 {
+            margin: 32px 0 12px;
+            font-family: var(--font-display);
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .service-item p {
+            color: rgba(23,22,19,0.64);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .contact-section {
+            position: relative;
+            width: min(1250px, 100%);
+            margin: 0 auto;
+            padding: 0 25px 130px;
+            z-index: 2;
+        }
+
+        .contact-panel {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 35px;
+            padding: 38px 42px;
+            border: 1px solid var(--line);
+            background: rgba(255,255,255,0.64);
+            box-shadow: 0 18px 42px rgba(17,15,12,0.06);
+        }
+
+        .contact-panel h2 {
+            margin-top: 10px;
+            font-family: var(--font-display);
+            font-size: clamp(26px, 4vw, 44px);
+            font-weight: 500;
+            color: var(--ink);
+        }
+
+        .contact-panel p {
+            max-width: 530px;
+            color: rgba(23,22,19,0.64);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .contact-links {
+            display: flex;
+            flex-shrink: 0;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .contact-links a {
+            color: var(--gold-light);
+            font-size: 11px;
+            letter-spacing: 0.12em;
+            text-decoration: none;
+        }
+
+        .contact-links a:hover {
+            color: #fff;
+        }
+
         .hero-stats {
             display: flex;
             gap: 48px;
@@ -831,6 +1084,51 @@
             opacity: 0;
             animation: heroElementAppear 1.3s ease forwards;
             animation-delay: 1.85s;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            margin-top: 42px;
+            opacity: 0;
+            animation: heroElementAppear 1.3s ease forwards;
+            animation-delay: 2.05s;
+        }
+
+        .hero-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 190px;
+            padding: 15px 22px;
+            border: 1px solid rgba(212, 175, 55, 0.65);
+            color: var(--gold-light);
+            background: rgba(212, 175, 55, 0.08);
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
+        }
+
+        .hero-action:hover {
+            color: #050505;
+            background: var(--gold-light);
+            transform: translateY(-3px);
+        }
+
+        .hero-action.secondary {
+            border-color: rgba(255, 255, 255, 0.22);
+            color: rgba(255, 255, 255, 0.72);
+            background: transparent;
+        }
+
+        .hero-action.secondary:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.5);
         }
 
         .hero-stat {
@@ -880,6 +1178,15 @@
             justify-content: space-between;
 
             margin-bottom: 45px;
+        }
+
+        .section-header::after {
+            content: "DESIGN \00B7 STRATEGIE \00B7 PERFORMANCE";
+            align-self: flex-end;
+            margin-bottom: 5px;
+            color: rgba(255, 255, 255, 0.28);
+            font-size: 9px;
+            letter-spacing: 0.22em;
         }
 
         .section-heading-wrap {
@@ -969,22 +1276,41 @@
         .project-card {
             position: relative;
             min-height: 320px;
-            border-radius: 18px;
+            border-radius: 20px;
             overflow: hidden;
-            background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.35));
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255,255,255,0.52);
+            border: 1px solid var(--line);
             cursor: pointer;
-            box-shadow: 0 32px 90px rgba(0, 0, 0, 0.24);
-            transition: transform 0.45s ease, border-color 0.35s ease, box-shadow 0.45s ease;
+            box-shadow: 0 18px 42px rgba(17, 15, 12, 0.08);
+            transition: transform 0.42s cubic-bezier(.16, 1, .3, 1), border-color 0.35s ease, box-shadow 0.45s ease;
             display: grid;
             grid-template-rows: 1fr auto;
             backdrop-filter: blur(10px);
         }
 
+        .project-card::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0;
+            transform: scaleX(0.35);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            pointer-events: none;
+        }
+
         .project-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(212, 175, 55, 0.3);
-            box-shadow: 0 42px 120px rgba(0, 0, 0, 0.35), 0 0 40px rgba(212, 175, 55, 0.06);
+            transform: translateY(-6px);
+            border-color: rgba(181, 141, 74, 0.4);
+            box-shadow: 0 26px 60px rgba(17, 15, 12, 0.12), 0 0 0 1px rgba(181, 141, 74, 0.08);
+        }
+
+        .project-card:hover::after {
+            opacity: 1;
+            transform: scaleX(1);
         }
 
         .project-card video,
@@ -1009,7 +1335,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 12px;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(255,255,255,0.52);
             backdrop-filter: blur(12px);
         }
 
@@ -1023,13 +1349,13 @@
             font-size: 0.65rem;
             letter-spacing: 0.14em;
             text-transform: uppercase;
-            color: var(--gold);
+            color: var(--gold-deep);
             opacity: 0.85;
         }
 
         .project-name {
             font-family: var(--font-display);
-            color: #f5f2ec;
+            color: var(--ink);
             font-size: 1.05rem;
             letter-spacing: 0.02em;
         }
@@ -1037,10 +1363,10 @@
         .project-action {
             min-width: 120px;
             padding: 11px 16px;
-            border: 1px solid rgba(212, 175, 55, 0.6);
+            border: 1px solid rgba(181, 141, 74, 0.55);
             border-radius: 999px;
-            background: rgba(212, 175, 55, 0.08);
-            color: #f5f2ec;
+            background: rgba(181, 141, 74, 0.08);
+            color: var(--ink);
             font-size: 0.72rem;
             letter-spacing: 0.14em;
             text-transform: uppercase;
@@ -1049,8 +1375,8 @@
         }
 
         .project-action:hover {
-            background: rgba(212, 175, 55, 0.18);
-            border-color: rgba(212, 175, 55, 0.95);
+            background: rgba(181, 141, 74, 0.14);
+            border-color: rgba(181, 141, 74, 0.9);
             transform: translateY(-1px);
         }
 
@@ -1066,6 +1392,33 @@
             opacity: 0.5;
             z-index: 2;
             pointer-events: none;
+        }
+
+        .video-badge {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            z-index: 4;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 11px;
+            border: 1px solid rgba(212, 175, 55, 0.5);
+            background: rgba(0, 0, 0, 0.66);
+            color: var(--gold-light);
+            font-size: 9px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            backdrop-filter: blur(8px);
+            pointer-events: none;
+        }
+
+        .video-badge-icon {
+            width: 0;
+            height: 0;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+            border-left: 7px solid var(--gold-light);
         }
 
         .project-label {
@@ -1283,6 +1636,35 @@
             text-align: center;
         }
 
+        .footer-cta {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 55px;
+            color: #f5f2ec;
+            text-decoration: none;
+        }
+
+        .footer-cta-label {
+            color: var(--gold);
+            font-size: 9px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+        }
+
+        .footer-cta-title {
+            font-family: var(--font-display);
+            font-size: clamp(30px, 5vw, 58px);
+            font-style: italic;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
+
+        .footer-cta:hover .footer-cta-title {
+            color: var(--gold-light);
+            transform: translateY(-3px);
+        }
+
         .footer-mark {
             font-family: var(--font-display);
             font-size: 22px;
@@ -1480,6 +1862,25 @@
                 padding: 18px 20px;
             }
 
+            .site-nav {
+                left: 16px;
+                right: 16px;
+                padding: 9px 10px;
+            }
+
+            .site-nav-group {
+                gap: 14px;
+            }
+
+            .site-nav a {
+                font-size: 9px;
+                letter-spacing: 0.1em;
+            }
+
+            .services-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
             .logo {
                 width: min(280px, 60vw);
             }
@@ -1525,6 +1926,13 @@
                 min-height: 280px;
             }
 
+            .featured-section,
+            .services-section,
+            .contact-section {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
             .project-card-content {
                 padding: 18px 18px 22px;
             }
@@ -1556,6 +1964,20 @@
                 padding: 16px 18px;
             }
 
+            .site-nav {
+                top: auto;
+                bottom: 10px;
+                left: 12px;
+                right: 12px;
+                justify-content: center;
+                transform: none;
+                padding: 8px 6px;
+            }
+
+            .site-nav-group {
+                gap: 12px;
+            }
+
             .logo {
                 width: min(240px, 68vw);
             }
@@ -1584,6 +2006,16 @@
                 gap: 30px;
             }
 
+            .hero-actions {
+                width: 100%;
+                flex-direction: column;
+                margin-top: 34px;
+            }
+
+            .hero-action {
+                width: min(310px, 100%);
+            }
+
             .cards-section {
                 padding: 60px 16px 100px;
             }
@@ -1595,6 +2027,11 @@
                 margin-bottom: 30px;
             }
 
+            .section-header::after {
+                align-self: flex-start;
+                margin-top: -6px;
+            }
+
             .cards-grid {
                 gap: 18px;
             }
@@ -1602,6 +2039,50 @@
             .project-card {
                 min-height: 250px;
                 border-radius: 16px;
+            }
+
+            .featured-project {
+                grid-template-columns: 1fr;
+            }
+
+            .featured-media {
+                min-height: 260px;
+            }
+
+            .featured-copy {
+                padding: 28px 24px 32px;
+            }
+
+            .services-intro,
+            .contact-panel {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .service-item,
+            .service-item:last-child {
+                border-right: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            }
+
+            .service-item:nth-child(3) {
+                border-right: 0;
+            }
+
+            .service-item:last-child {
+                border-bottom: 0;
+            }
+
+            .contact-panel {
+                padding: 28px 24px;
+            }
+
+            .contact-links {
+                align-items: flex-start;
             }
 
             .project-card video,
@@ -1653,12 +2134,35 @@
                 padding: 14px 16px;
             }
 
+            .site-nav {
+                left: 8px;
+                right: 8px;
+                bottom: 8px;
+                gap: 8px;
+            }
+
+            .site-nav-group {
+                gap: 8px;
+            }
+
+            .site-nav a {
+                font-size: 8px;
+                letter-spacing: 0.06em;
+            }
+
             .hero {
                 padding: 50px 16px 80px;
             }
 
             .cards-section {
                 padding: 50px 14px 80px;
+            }
+
+            .featured-section,
+            .services-section,
+            .contact-section {
+                padding-left: 14px;
+                padding-right: 14px;
             }
 
             .section-kicker {
@@ -1784,6 +2288,17 @@
 
         <header class="header">
 
+            <nav class="site-nav" aria-label="Navigation principale">
+                <div class="site-nav-group">
+                    <a href="#studio">Studio</a>
+                    <a href="#services">Services</a>
+                </div>
+                <div class="site-nav-group">
+                    <a href="#projects">Projets</a>
+                    <a class="nav-contact" href="#contact">Contact</a>
+                </div>
+            </nav>
+
             <div class="logo-wrap">
                 <img
                     src="img/logo.png"
@@ -1797,22 +2312,23 @@
 
         <!-- HERO -->
 
-        <section class="hero">
+        <section class="hero" id="studio">
 
             <div class="hero-eyebrow">
                 Digital Engineering
             </div>
 
             <h1>
-                Qui <em>sommes</em>-nous
+                Nous créons des expériences <em>digitales</em> qui restent.
             </h1>
 
             <div class="gold-line"></div>
 
             <p class="hero-description">
-               
-              créée en 2024, place l'innovation et la créativité au cœur du développement numérique. Nous sommes une équipe passionnée de développeurs, designers et ingénieurs qui conçoivent des solutions digitales percutantes et des sites web de luxe, pensés pour présenter votre marque et affirmer sa place sur le marché. Notre mission : transformer chaque idée en expérience numérique d'exception, portée par les technologies et méthodologies les plus avancées.
+                            RTPHM DEV conçoit des sites premium, des systèmes sur mesure et des logiciels métier qui donnent aux entreprises plus de clarté, de contrôle et d'impact.
             </p>
+
+                        <div class="hero-kicker">Direction artistique · Technologie · Impact</div>
 
             <div class="hero-stats">
                 <div class="hero-stat">
@@ -1829,6 +2345,66 @@
                 </div>
             </div>
 
+            <div class="hero-actions">
+                <a class="hero-action" href="mailto:difwalid18@gmail.com?subject=Projet%20digital%20sur-mesure">
+                    Démarrer un projet
+                </a>
+                <a class="hero-action secondary" href="#projects">
+                    Voir nos réalisations
+                </a>
+            </div>
+
+        </section>
+
+        <section class="featured-section" aria-labelledby="featured-title">
+            <div class="featured-project">
+                <div class="featured-media">
+                    <video muted autoplay loop playsinline preload="metadata" src="videos/mondial-cert.mp4"></video>
+                </div>
+                <div class="featured-copy">
+                    <div class="featured-label">Projet vedette · Août 2026</div>
+                    <h2 id="featured-title">Mondial Cert</h2>
+                    <p>Une plateforme institutionnelle pensée pour rendre la certification plus claire, plus crédible et plus accessible aux entreprises.</p>
+                    <a class="featured-link" href="#projects">Explorer le projet</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="services-section" id="services" aria-labelledby="services-title">
+            <div class="services-intro">
+                <div>
+                    <span class="section-kicker">Notre savoir-faire</span>
+                    <h2 id="services-title">Des idées fortes, transformées en présence digitale.</h2>
+                </div>
+                <p>Chaque détail est pensé pour donner à votre marque une image plus désirable, plus claire et plus mémorable.</p>
+            </div>
+            <div class="services-grid">
+                <article class="service-item">
+                    <div class="service-number">01</div>
+                    <h3>Sites premium</h3>
+                    <p>Des expériences éditoriales qui donnent immédiatement confiance et positionnent votre marque.</p>
+                </article>
+                <article class="service-item">
+                    <div class="service-number">02</div>
+                    <h3>E-commerce</h3>
+                    <p>Des parcours produits élégants, clairs et conçus pour guider naturellement vers l'achat.</p>
+                </article>
+                <article class="service-item">
+                    <div class="service-number">03</div>
+                    <h3>Identité digitale</h3>
+                    <p>Une direction visuelle cohérente qui transforme chaque écran en signature de marque.</p>
+                </article>
+                <article class="service-item">
+                    <div class="service-number">04</div>
+                    <h3>ERP &amp; Odoo</h3>
+                    <p>Des outils de gestion adaptés à vos processus : ventes, stocks, comptabilité et opérations.</p>
+                </article>
+                <article class="service-item">
+                    <div class="service-number">05</div>
+                    <h3>Python &amp; IA</h3>
+                    <p>Des logiciels métier, automatisations et solutions IA conçus pour accompagner votre prochaine étape.</p>
+                </article>
+            </div>
         </section>
 
 
@@ -1837,7 +2413,7 @@
              PROJECTS
         ===================================================== -->
 
-        <section class="cards-section">
+        <section class="cards-section" id="projects">
 
             <div class="section-header">
 
@@ -1861,24 +2437,17 @@
                 <div class="cards-grid">
 
                     <article
-                        class="project-card video-card"
-                        data-type="video"
-                        data-src="videos/argoub-site.mp4"
-                        data-title="Argoub Site"
-                        data-date="Mai 2025"
-                        data-description="Site vitrine haut de gamme avec navigation fluide, détails produits enrichis et une approche élégante pour le luxe digital."
+                        class="project-card image-card"
+                        data-type="image"
+                        data-title="Corporate LMS"
+                        data-date="Mars 2025"
+                        data-description="During the lockdown, a top European telecom engaged us to build a corporate LMS portal for thousands of employees. The platform launched in 3 months with multi-level authorization, secure partner access, and a modular architecture designed to scale across branches."
                     >
-                        <video
-                            muted
-                            loop
-                            preload="metadata"
-                            playsinline
-                            src="videos/argoub-site.mp4">
-                        </video>
+                        <img src="img/design1-1.jpeg" alt="Corporate LMS" loading="lazy">
                         <div class="project-card-content">
                             <div class="project-name-wrap">
-                                <span class="project-tag">Site vitrine</span>
-                                <div class="project-name">Argoub Site</div>
+                                <span class="project-tag">Corporate LMS</span>
+                                <div class="project-name">Télécom Europe</div>
                             </div>
                             <button class="project-action">Lire plus</button>
                         </div>
@@ -1889,8 +2458,9 @@
                         data-type="video"
                         data-src="videos/END (1).mp4"
                         data-title="Chevron Paris"
-                        data-date="Juin 2025"
-                        data-description="Identité digitale inspirée du chic parisien : motif chevron en fil conducteur, transitions cinématiques et direction artistique conçue pour capter l'attention dès les premières secondes."
+                        data-date="Juin 2025 · Projet livré"
+                        data-category="E-commerce · Direction artistique"
+                        data-description="Projet livré en juin 2025 pour Chevron Paris, une marque française de maroquinerie haut de gamme. Nous avons créé une expérience digitale complète : univers visuel inspiré des galeries parisiennes, présentation détaillée des sacs, catalogue organisé et parcours d'achat jusqu'au panier. La palette noir, blanc et or renforce la confiance et la perception premium, tandis que la navigation met les produits au centre de l'expérience. Impact client : une vitrine élégante qui raconte la marque, facilite la découverte de la collection et prépare naturellement les visiteurs à l'achat."
                     >
                         <video
                             muted
@@ -1899,6 +2469,7 @@
                             playsinline
                             src="videos/END (1).mp4">
                         </video>
+                        <span class="video-badge"><span class="video-badge-icon"></span>Vidéo projet</span>
                         <div class="project-card-content">
                             <div class="project-name-wrap">
                                 <span class="project-tag">Identité digitale</span>
@@ -1923,10 +2494,37 @@
                             playsinline
                             src="videos/ihm-final (1).mp4">
                         </video>
+                        <span class="video-badge"><span class="video-badge-icon"></span>Vidéo projet</span>
                         <div class="project-card-content">
                             <div class="project-name-wrap">
                                 <span class="project-tag">Cosmétiques</span>
                                 <div class="project-name">Splendide-DZ</div>
+                            </div>
+                            <button class="project-action">Lire plus</button>
+                        </div>
+                    </article>
+
+                    <article
+                        class="project-card video-card"
+                        data-type="video"
+                        data-src="videos/mondial-cert.mp4"
+                        data-title="Mondial Cert"
+                        data-date="Août 2026 · Projet livré"
+                        data-category="Site institutionnel · Certification"
+                        data-description="Projet livré en août 2026 pour Mondial Cert, un organisme de certification indépendant au service des entreprises en Algérie et au Maghreb. Nous avons conçu un site institutionnel clair et rassurant pour présenter les certifications ISO 9001, ISO 14001, ISO 45001 et ISO 22000, expliquer leurs bénéfices et guider chaque visiteur vers une demande d'information. Impact client : une présence digitale plus crédible, une lecture simplifiée des services et un parcours de contact pensé pour convertir l'intérêt des entreprises en demandes concrètes."
+                    >
+                        <video
+                            muted
+                            loop
+                            preload="metadata"
+                            playsinline
+                            src="videos/mondial-cert.mp4">
+                        </video>
+                        <span class="video-badge"><span class="video-badge-icon"></span>Vidéo projet</span>
+                        <div class="project-card-content">
+                            <div class="project-name-wrap">
+                                <span class="project-tag">Certification ISO</span>
+                                <div class="project-name">Mondial Cert</div>
                             </div>
                             <button class="project-action">Lire plus</button>
                         </div>
@@ -1980,10 +2578,28 @@
 
         </section>
 
+        <section class="contact-section" id="contact" aria-labelledby="contact-title">
+            <div class="contact-panel">
+                <div>
+                    <span class="section-kicker">Parlons de votre projet</span>
+                    <h2 id="contact-title">Votre marque mérite une expérience à sa hauteur.</h2>
+                    <p>Décrivez-nous votre ambition. Nous vous répondrons directement pour imaginer la prochaine étape.</p>
+                </div>
+                <div class="contact-links">
+                    <a href="mailto:difwalid18@gmail.com">difwalid18@gmail.com</a>
+                    <a href="https://wa.me/213555997021" target="_blank" rel="noopener">WhatsApp · +213 555 997 021</a>
+                </div>
+            </div>
+        </section>
+
 
         <!-- FOOTER -->
 
         <footer class="footer">
+            <a class="footer-cta" href="mailto:difwalid18@gmail.com?subject=Parlons%20de%20votre%20projet">
+                <span class="footer-cta-label">Votre prochaine signature digitale</span>
+                <span class="footer-cta-title">Créons quelque chose d'inoubliable.</span>
+            </a>
             <div class="footer-mark">RTPHM DEV</div>
             <div class="footer-tagline">Digital Engineering — Alger, Algérie</div>
             <div class="footer-bottom">&copy; 2025 RTPHM DEV. Tous droits réservés.</div>
@@ -2252,7 +2868,7 @@
                 const card = button.closest(".project-card");
                 const title = card.dataset.title;
                 const date = card.dataset.date;
-                const type = card.dataset.type === "video" ? "Web Project" : "Design Project";
+                const type = card.dataset.category || (card.dataset.type === "video" ? "Web Project" : "Design Project");
                 const description = card.dataset.description;
 
                 infoTitle.textContent = title;
@@ -2292,16 +2908,53 @@
 
 
 
-        /* =====================================================
-           HEADER SHRINK
-        ===================================================== */
-
         const header =
             document.querySelector(".header");
 
-
         const home =
             document.getElementById("home");
+
+
+        /* =====================================================
+           HASH NAVIGATION
+        ===================================================== */
+
+        document.querySelectorAll('a[href^="#"]').forEach((link) => {
+            link.addEventListener('click', (event) => {
+                const targetId = link.getAttribute('href');
+
+                if (!targetId || targetId === '#') {
+                    return;
+                }
+
+                const target = document.querySelector(targetId);
+
+                if (!target) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                const offset = header.getBoundingClientRect().height + 22;
+                const targetPosition = target.offsetTop - offset;
+
+                home.scrollTo({
+                    top: Math.max(targetPosition, 0),
+                    behavior: 'smooth'
+                });
+
+                if (history && history.pushState) {
+                    history.pushState(null, '', targetId);
+                } else {
+                    window.location.hash = targetId;
+                }
+            });
+        });
+
+
+        /* =====================================================
+           HEADER SHRINK
+        ===================================================== */
 
 
         home.addEventListener(
